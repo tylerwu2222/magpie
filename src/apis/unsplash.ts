@@ -1,0 +1,1 @@
+export const random_image_url = 'https://api.unsplash.com/photos/random';
