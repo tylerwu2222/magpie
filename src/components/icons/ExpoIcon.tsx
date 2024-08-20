@@ -1,47 +1,65 @@
 import React from 'react';
+import { View, StyleSheet } from 'react-native';
 import { AntDesign, Entypo, Fontisto, Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 // import { Icon } from 'react-native-vector-icons/Icon';
 
-type IconProps = {
-    library?: string;
-    name?: any;
-    size?: number;
-    color?: string;
+interface IconProps {
+    library: string;
+    name: any;
+    size: number;
+    padding: number;
+    color: string;
+    backgroundColor: string;
 };
 
-const ExpoIcon: React.FC<IconProps> = ({
+const ExpoIcon = ({
     library,
     name,
-    size,
-    color
-}) => {
-    // return default icon if no library/name provided
+    size = 40,
+    padding = 10,
+    color = "black",
+    backgroundColor = 'transparent'
+}: Partial<IconProps>) => {
+
+    const styles = StyleSheet.create({
+        iconView: {
+            padding: padding,
+            backgroundColor: backgroundColor
+        }
+    })
+
+    // console.log('library',library,'name',name,'color',color);
+    // icon = default icon if no library/name provided
+    let icon;
     if (!library || !name) {
-        return <AntDesign name="pluscircle" size={24} color="black" />;
+        icon = <AntDesign name="pluscircle" size={size} color="black" />;
     }
     else {
         if (library == 'AntDesign') {
-            return <AntDesign name={name} size={size} color={color} />;
+            icon = <AntDesign name={name} size={size} color={color} />;
         }
         else if (library == 'Entypo') {
-            return <Entypo name={name} size={size} color={color} />;
+            icon = <Entypo name={name} size={size} color={color} />;
         }
         else if (library == 'Fontisto') {
-            return <Fontisto name={name} size={size} color={color} />;
+            icon = <Fontisto name={name} size={size} color={color} />;
         }
         else if (library == 'Ionicons') {
-            return <Ionicons name={name} size={size} color={color} />;
+            icon = <Ionicons name={name} size={size} color={color} />;
         }
         else if (library == 'MaterialIcons') {
-            return <MaterialIcons name={name} size={size} color={color} />;
+            icon = <MaterialIcons name={name} size={size} color={color} />;
         }
         else if (library == 'MaterialCommunityIcons') {
-            return <MaterialCommunityIcons name={name} size={size} color={color} />;
+            icon = <MaterialCommunityIcons name={name} size={size} color={color} />;
         }
         else {
-            return <AntDesign name="pluscircle" size={24} color="black" />;
+            icon = <AntDesign name="pluscircle" size={size} color="black" />;
         }
     }
+    return <View style={styles.iconView}>
+        {icon}
+    </View>
 };
 
 export default ExpoIcon;

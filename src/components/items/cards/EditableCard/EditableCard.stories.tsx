@@ -6,11 +6,11 @@ import { withBackgrounds } from '@storybook/addon-ondevice-backgrounds';
 import { StorybookBackgrounds } from '@/assets/constants/StorybookBackgrounds';
 
 // component
-import StaticCard from './EditableCard';
+import EditableCard from './EditableCard';
 
-const StaticCardMeta: Meta<typeof StaticCard> = {
-  title: 'StaticCard',
-  component: StaticCard,
+const EditableCardMeta: Meta<typeof EditableCard> = {
+  title: 'Editable Card',
+  component: EditableCard,
   args: {
     // imageSource: 'templateImages/birds.png'
   },
@@ -25,6 +25,6 @@ const StaticCardMeta: Meta<typeof StaticCard> = {
   parameters: StorybookBackgrounds
 };
 
-export default StaticCardMeta;
+export default EditableCardMeta;
 
-export const Basic: StoryObj<typeof StaticCardMeta> = {};
+export const Basic: StoryObj<typeof EditableCardMeta> = {};

@@ -6,10 +6,11 @@ export type textComponentColorDict = {
 }
 
 export type basicButtonType = {
-    isDisabled?: boolean;
-    contentSize?: number;
-    borderRadius?: number;
-    buttonColorDict?: textComponentColorDict
+    isDisabled?: boolean,
+    contentSize?: number,
+    borderRadius?: number,
+    buttonColorDict?: textComponentColorDict,
+    onPressFn?:() => void
 }
 
 export type TextPosition = 'bottom' | 'left' | 'top' | 'right';

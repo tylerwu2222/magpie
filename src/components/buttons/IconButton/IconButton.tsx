@@ -8,8 +8,9 @@ import { Colors } from '@/assets/constants/Colors';
 import ExpoIcon from '../../icons/ExpoIcon';
 
 interface CustomIconButtonProps {
-    // iconComponent: any;
-    iconComponent: string | ReactElement;
+    // iconName: any;
+    // iconName: string | ReactElement;
+    iconName: string;
     isDisabled?: boolean;
     // muiIcon: string,
     text?: string | null,
@@ -32,7 +33,8 @@ interface CustomIconButtonProps {
 
 
 const CustomIconButton = ({
-    iconComponent = <ExpoIcon />,
+    iconName = 'camera',
+    // iconName = <ExpoIcon />,
     isDisabled = false,
     text = null,
     mode = 'contained',
@@ -45,13 +47,14 @@ const CustomIconButton = ({
     onPressFn = () => { },
 }: CustomIconButtonProps) => {
 
+    // console.log('icon button press fn', onPressFn);
     const [currButtonColor, setCurrButtonColor] = useState(buttonColorDict.default);
 
     const styles = StyleSheet.create({
         button: {
             // justifyContent: 'center',
             // alignItems: 'center',
-            borderRadius: borderRadius,
+            borderRadius: borderRadius
         },
         buttonContent: {
             paddingVertical: paddingVertical,
@@ -59,43 +62,43 @@ const CustomIconButton = ({
         }
     })
 
-    if (React.isValidElement(iconComponent)) {
-        return (
-            <IconButton
-                icon={() => iconComponent}
-                disabled={isDisabled}
-                mode={mode}
-                iconColor={buttonColorDict.text}
-                containerColor={currButtonColor}
-                rippleColor={buttonColorDict.ripple}
-                onPress={
-                    () => onPressFn
-                }
-                // contentStyle={styles.buttonContent}
-                style={styles.button}
-            >
-            </IconButton>
+    // if (React.isValidElement(iconName)) {
+    //     return (
+    //         <IconButton
+    //             icon={() => iconName}
+    //             disabled={isDisabled}
+    //             mode={mode}
+    //             iconColor={buttonColorDict.text}
+    //             size={iconSize}
+    //             containerColor={currButtonColor}
+    //             rippleColor={buttonColorDict.ripple}
+    //             onPress={
+    //                 () => onPressFn
+    //             }
+    //             // contentStyle={styles.buttonContent}
+    //             style={styles.button}
+    //         >
+    //         </IconButton>
 
-        )
-    }
-    else if (typeof iconComponent == 'string') {
-        return (
-            <IconButton
-                icon={iconComponent}
-                disabled={isDisabled}
-                mode={mode}
-                iconColor={buttonColorDict.text}
-                containerColor={currButtonColor}
-                rippleColor={buttonColorDict.ripple}
-                onPress={
-                    () => onPressFn
-                }
-                // contentStyle={styles.buttonContent}
-                style={styles.button}
-            >
-            </IconButton>
-        )
-    }
+    //     )
+    // }
+    // else if (typeof iconName == 'string') {
+    return (
+        <IconButton
+            icon={iconName}
+            disabled={isDisabled}
+            mode={mode}
+            size={iconSize}
+            iconColor={buttonColorDict.text}
+            containerColor={currButtonColor}
+            rippleColor={buttonColorDict.ripple}
+            onPress={onPressFn}
+            // contentStyle={styles.buttonContent}
+            style={styles.button}
+        >
+        </IconButton>
+    )
+    // }
 
 
 }

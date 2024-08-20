@@ -5,11 +5,12 @@ import { View } from 'react-native';
 
 import { Colors } from '@/assets/constants/Colors';
 import ExpoIcon from '../../icons/ExpoIcon';
-import IconButton from './IconButton';
+// import IconButton from './IconButton';
+import CustomIconButton from './IconButton';
 
-const IconButtonMeta: Meta<typeof IconButton> = {
-  title: 'IconButton',
-  component: IconButton,
+const IconButtonMeta: Meta<typeof CustomIconButton> = {
+  title: 'Icon Button',
+  component: CustomIconButton,
   argTypes: {
     onPressFn: { action: 'icon button pressed' }
   },
@@ -33,23 +34,32 @@ const IconButtonMeta: Meta<typeof IconButton> = {
 export default IconButtonMeta;
 
 // default
-export const Basic: StoryObj<typeof IconButton> = {};
-
-// with string icon and text
-export const IconStringButton: StoryObj<typeof IconButton> = {
+export const Basic: StoryObj<typeof CustomIconButton> = {
   args: {
-    iconComponent: 'camera',
+    iconName: 'plus',
     iconSize: 24,
-    text: 'camera',
-    buttonColorDict: Colors.accentBlueButton
+    buttonColorDict: Colors.darkButton
   },
   argTypes: {
-    onPressFn: { action: 'help button pressed' }
+    onPressFn: { action: 'plus button pressed' }
   }
 };
 
+// with string icon and text
+// export const IconStringButton: StoryObj<typeof CustomIconButton> = {
+//   args: {
+//     iconComponent: 'plus',
+//     iconSize: 24,
+//     text: 'plus',
+//     buttonColorDict: Colors.accentBlueButton
+//   },
+//   argTypes: {
+//     onPressFn: { action: 'help button pressed' }
+//   }
+// };
+
 // with icon element // DO NOT USE EXPO ICONS FOR NOW
-// export const IconElementButton: StoryObj<typeof IconButton> = {
+// export const IconElementButton: StoryObj<typeof CustomIconButton> = {
 //   args: {
 //     iconComponent: <ExpoIcon library='MaterialCommunityIcons' name="help-circle-outline" size={24} color="black" />,
 //     iconSize: 24

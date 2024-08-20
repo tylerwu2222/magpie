@@ -11,7 +11,7 @@ import StaticCard from './StaticCard';
 import dummyCollection from '@/assets/data/dummyData/dummyCollection.json';
 
 const StaticCardMeta: Meta<typeof StaticCard> = {
-  title: 'StaticCard',
+  title: 'Static Card',
   component: StaticCard,
   args: {
     entryID: 0,

@@ -6,7 +6,7 @@ import { StorybookBackgrounds } from '@/assets/constants/StorybookBackgrounds';
 import ImageButton from './ImageButton';
 
 const ImageButtonMeta: Meta<typeof ImageButton> = {
-  title: 'ImageButton',
+  title: 'Image Button',
   component: ImageButton,
   argTypes: {
     onPressFn: { action: 'pressed the button' },

@@ -34,51 +34,86 @@ const magpie_blue_medium_dark = '#42bbd9';
 const magpie_blue = '#0a7ea4';
 
 // greys (buttons, text)
-const magpie_grey_lightest = '#F9F9F9';
+const magpie_grey_lightest = '#fCfCfC';
+const magpie_grey_lighter = '#F9F9F9';
 const magpie_grey_light = '#D9D9D9';
 const magpie_grey_light_light_medium = '#CCCCCC';
 const magpie_grey_light_medium = '#BABABA';
 const magpie_grey_medium = '#7F7F7F';
 const magpie_grey_medium_dark = '#545454';
 const magpie_grey_dark = '#363636';
+const magpie_grey_darker = '#161616';
 
 // logo
 const magpie_logo_white = '#EFFDFE';
 const magpie_logo_black = '#040710';
 const magpie_logo_blue = '#106C9D';
 
+// theme
+const lightTheme = {
+  dark: false,
+  colors: {
+    primary: magpie_logo_blue,
+    background: magpie_grey_lightest,
+    card: magpie_logo_white,
+    text: magpie_logo_black,
+    border: magpie_grey_dark,
+    notification: magpie_blue_medium_dark,
+  }
+}
+
+const darkTheme = {
+  dark: false,
+  colors: {
+    primary: magpie_logo_blue,
+    background: magpie_grey_dark,
+    card: magpie_grey_medium_dark,
+    text: magpie_logo_white,
+    border: magpie_grey_light,
+    notification: magpie_blue_light_medium,
+  }
+}
+
+
 // maps colors to functionality
 export const Colors = {
-
   // screen themes
   lightTheme: {
     text: magpie_logo_black,
     background: magpie_logo_white,
+    lightBackground: magpie_grey_lightest,
     tint: magpie_blue,
+    textInput: {
+      text: magpie_logo_black,
+      placeholder: magpie_grey_medium_dark,
+      background: magpie_grey_lightest
+    },
+    transparentTextInput: {
+      text: magpie_logo_black,
+      placeholder: magpie_grey_medium_dark,
+      background: 'transparent'
+    }
   },
   darkTheme: {
     text: magpie_logo_white,
     background: magpie_grey_dark,
     tint: magpie_blue,
+    textInput: {
+      text: magpie_grey_lightest,
+      placeholder: magpie_grey_light,
+      background: magpie_grey_dark
+    },
+    transparentTextInput: {
+      text: magpie_grey_lightest,
+      placeholder: magpie_grey_light,
+      background: 'transparent'
+    }
   },
-
   // card color themes
   lightCard: {
     background: magpie_logo_white,
     border: magpie_logo_black,
     text: magpie_grey_dark
-  },
-
-  // text color themes
-  darkTextInput: {
-    text: magpie_logo_black,
-    placeholder: magpie_grey_medium,
-    background: 'transparent'
-  },
-  lightTextInput: {
-    text: magpie_logo_white,
-    placeholder: magpie_grey_lightest,
-    background: magpie_grey_medium
   },
 
   // button color themes

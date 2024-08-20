@@ -9,7 +9,7 @@ import { StorybookBackgrounds } from '@/assets/constants/StorybookBackgrounds';
 import DraggableCard from './DraggableCard';
 
 const DraggableCardMeta: Meta<typeof DraggableCard> = {
-  title: 'DraggableCard',
+  title: 'Draggable Card',
   component: DraggableCard,
   args: {
   },

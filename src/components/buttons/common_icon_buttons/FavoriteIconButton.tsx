@@ -1,6 +1,6 @@
 import React from 'react'
 
-import IconButton from '../IconButton/IconButton'
+import CustomIconButton from '../IconButton/IconButton'
 import { Colors } from '@/assets/constants/Colors'
 
 import { basicButtonType } from '@/src/types/components'
@@ -11,8 +11,8 @@ export default function FavoriteIconButton({
   buttonColorDict = Colors.accentBlueButton
 }: basicButtonType) {
   return (
-    <IconButton
-      iconComponent='heart'
+    <CustomIconButton
+      iconName='heart'
       isDisabled={isDisabled}
       iconSize={contentSize}
       buttonColorDict={buttonColorDict}

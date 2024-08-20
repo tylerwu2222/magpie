@@ -9,7 +9,7 @@ import { StorybookBackgrounds } from '@/assets/constants/StorybookBackgrounds';
 import TC from './TemplateComponent';
 
 const TCMeta: Meta<typeof TC> = {
-  title: 'Component',
+  title: 'TC',
   component: TC,
   args: {
   },

@@ -7,7 +7,7 @@ import { Colors } from '@/assets/constants/Colors';
 import TextButton from './TextButton';
 
 const TextButtonMeta: Meta<typeof TextButton> = {
-  title: 'TextButton',
+  title: 'Text Button',
   component: TextButton,
   argTypes: {
     onPressFn: { action: 'pressed text button' },

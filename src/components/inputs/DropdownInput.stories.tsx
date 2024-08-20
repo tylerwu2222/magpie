@@ -6,7 +6,7 @@ import { StorybookBackgrounds } from '@/assets/constants/StorybookBackgrounds';
 import DropdownInput from './DropdownInput';
 
 const DropdownInputMeta: Meta<typeof DropdownInput> = {
-  title: 'DropdownInput',
+  title: 'Dropdown Input',
   component: DropdownInput,
   args: {
     label: 'dropdown',

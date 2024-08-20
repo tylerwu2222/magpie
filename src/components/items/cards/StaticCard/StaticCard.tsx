@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 import React, { useState, useContext } from 'react';
-import AppContext from '@/AppContextProvider';
 import BlurOverlayContext from '@/src/providers/OverlayProviders/BlurOverlayProvider';
 
 // components
@@ -18,39 +17,42 @@ import { cardDimensions } from '@/assets/constants/magpieDimensions';
 // data
 // import dummyCollection from '@/assets/data/dummyData/dummyCollection.json';
 import { entryDataType } from '@/src/types/data';
+import CardContent from '../CardContent';
+import { HomeContext } from '@/app/home';
 
 interface StaticCardProps {
-  entryID: number,
-  entryData: entryDataType,
+  entryData: entryDataType | undefined,
   mode: 'elevated' | 'outlined' | 'contained',
   imageSource?: string,
 
-  isSharable?: boolean,
-  isInteractable?: boolean,
-  isDraggable?: boolean,
+  hasImage: boolean,
+  isSharable: boolean,
+  isInteractable: boolean,
+  isDraggable: boolean,
 
-  cardColorDict?: {
+  cardColorDict: {
     'background': string,
     'border': string,
     'text'?: string
   },
-  cardPaddingHorizontal?: number,
-  cardPaddingVertical?: number,
+  cardPaddingHorizontal: number,
+  cardPaddingVertical: number,
   onPressFn: () => void,
   onLongPressFn: () => void,
   // additionalStyle?: React.CSSProperties
-  additionalStyle?: any
+  additionalStyle: any
 }
 
+// static card, opens editable card if interactable
 const StaticCard = (
   {
-    entryID = 0,
-    entryData = {},
+    entryData,
     mode = 'outlined',
     imageSource = '',
 
+    hasImage = false,
     isSharable = true,
-    isInteractable = true,
+    isInteractable = false,
     isDraggable = false,
 
     cardColorDict = Colors.lightCard,
@@ -61,28 +63,29 @@ const StaticCard = (
     additionalStyle
   }: Partial<StaticCardProps>
 ) => {
-  /**
-   * non-editable, card, can be dragged?
-   */
 
-  const [editableCardVisible, setEditableCardVisible] = useState(false);
+  const [editableCardModalVisible, setEditableCardModalVisible] = useState(false);
 
-  const {
-    setEditEntryID
-  } = useContext(AppContext);
+  // const {
+  //   showBlurOverlay
+  // } = useContext(BlurOverlayContext);
 
-  const {
-    showBlurOverlay
-  } = useContext(BlurOverlayContext);
+  // const cardIcons = [
+  //   // <FavoriteIconButton contentSize={20} />,
+  //   <AddIconButton contentSize={20} />,
+  //   <ShareIconButton contentSize={20} />];
 
   const styles = StyleSheet.create({
     card: {
       backgroundColor: cardColorDict.background,
       borderColor: cardColorDict.border,
       borderRadius: cardDimensions.borderRadius,
+      borderTopLeftRadius: 0,
+      borderBottomRightRadius: 0,
       // minWidth: 260,
       width: cardDimensions.width,
-      height: cardDimensions.height
+      maxHeight: cardDimensions.height,
+      overflow: 'hidden'
     },
     cardTitle: {
       color: cardColorDict.text
@@ -97,79 +100,38 @@ const StaticCard = (
     }
   })
 
-  // text input should only be editable when card clicked --> modal/focus mode
+  const { fetchSetNotes } = useContext(HomeContext);
+
+  // make ECM visible on click (if interactable)
   return (
     <>
-      {editableCardVisible ? <EditableCardModal
-        entryID={entryID}
+      <EditableCardModal
         entryData={entryData}
-        visible={editableCardVisible}
+        visible={editableCardModalVisible}
         modalDismissFn={() => {
-          console.log('setting card visibility to false');
-          setEditableCardVisible(false);
-        }} /> : <></>}
+          setEditableCardModalVisible(false); // close modal
+          fetchSetNotes(); // update all notes if changes made
+        }}
+        fullScreen={true}
+      />
       <Card
         mode={mode}
         onPress={() => {
           if (isInteractable) {
-            // toggle active modal card
-            if (setEditEntryID) {
-              setEditEntryID(entryID); // replace with actual ID later
-            }
-            setEditableCardVisible(true);
-            showBlurOverlay();
+            setEditableCardModalVisible(true);
             onPressFn();
           }
         }}
         onLongPress={onLongPressFn}
         style={[styles.card, additionalStyle]}
       >
-        {/* <Card.Title
-          title={entryData.title}
-          titleStyle={styles.cardTitle}
-          titleVariant='headlineMedium'
-          subtitle={entryData.subtitle}
-          subtitleStyle={styles.cardTitle}
-          subtitleVariant='titleMedium'
-        /> */}
-        <Card.Content style={styles.cardContent}>
-          <TextInput
-            value={entryData.title}
-            textInputColor={Colors.darkTextInput}
-            paddingHorizontal={8} // match default of Card.Title
-            fontSize={28}
-            isEditable={false}
-          />
-          <TextInput
-            value={entryData.subtitle}
-            textInputColor={Colors.darkTextInput}
-            paddingHorizontal={8} // match default of Card.Title
-            fontSize={16}
-            isEditable={false}
-          />
-          <TextInput
-            placeholder='add something...'
-            value={entryData.description}
-            textInputColor={Colors.darkTextInput}
-            isEditable={false}
-            isMultiline={true}
-            paddingHorizontal={8} // match default of Card.Title
-          />
-        </Card.Content>
-        <Card.Content style={[styles.cardContent, styles.cardLastContent]}>
-          <Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
-        </Card.Content>
-        {/* replace local w online */}
-        <Card.Actions>
-          {isInteractable ?
-            <>
-              <FavoriteIconButton />
-              <AddIconButton />
-              {isSharable ? <ShareIconButton /> : <></>}
-            </> :
-            <></>
-          }
-        </Card.Actions>
+        <CardContent
+          entryData={entryData}
+          // bottomCardIcons={cardIcons}
+          showPlaceholders={false}
+          hasImage={hasImage}
+          styles={styles}
+        />
       </Card >
     </>
   )
