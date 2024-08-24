@@ -1,25 +1,19 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
-
-import { Colors } from '@/assets/constants/Colors';
-// import CustomIconButton from '../../buttons/IconButton/IconButton';
-// import { magpieDimensions } from '@/assets/constants/magpieDimensions';
+import React, { useContext } from 'react';
+import { HomeContext } from '@/app/home';
 
 // bottom navbar icons
 import GraphTreeIcon from '../../icons/common_icons/GraphTreeIcon';
 import GridIcon from '../../icons/common_icons/GridIcon';
 import ListIcon from '../../icons/common_icons/ListIcon';
 import CardsIcon from '../../icons/common_icons/CardsIcon';
-
 import PencilIconButton from '../../buttons/common_icon_buttons/PencilIconButton';
 import AddCollectionIconButton from '../../buttons/common_icon_buttons/AddCollectionIconButton';
 import AddIconButton from '../../buttons/common_icon_buttons/AddIconButton';
-// import GraphIconButton from '../../buttons/common_icon_buttons/GraphIconButton';
 import SliderButtonSelect from '../../composite_components/buttons/SliderButtonSelect/SliderButtonSelect';
-import { magpieDimensions } from '@/assets/constants/magpieDimensions';
-import EditableCardModal from '../../modals/EditableCardModal/EditableCardModal';
-// import HomeIconButton from '../../buttons/common_icon_buttons/HomeIconButton'
 
+import { Colors } from '@/assets/constants/Colors';
+import { navbarDimensions } from '@/assets/constants/magpieDimensions';
 
 interface BottomNavbarProps {
   navbarHeight: number,
@@ -28,7 +22,7 @@ interface BottomNavbarProps {
 
 const BottomNavbar = (
   {
-    navbarHeight = 80,
+    navbarHeight = navbarDimensions.bottomNavbarHeight,
     paddingH = 20
   }: Partial<BottomNavbarProps>
 ) => {
@@ -57,31 +51,16 @@ const BottomNavbar = (
   })
 
   // const navbarIcons = ['view', 'edit', 'new_collection', 'new_collection']
-  const [newNoteVisible, setNewNoteVisible] = useState(false);
+
+  const {setNewNoteVisible} = useContext(HomeContext);
 
   // display new note modal
   const displayNewNote = () => {
     setNewNoteVisible(true)
   };
 
-  // new note save/don't save handler
-  const handleNewNoteClose = () => {
-    // only save if text
-
-
-    // close new note
-    console.log('setting new card visibility to false!');
-    setNewNoteVisible(false);
-  };
-
   return (
     <>
-      {newNoteVisible ?
-        <EditableCardModal
-          visible={newNoteVisible}
-          modalDismissFn={handleNewNoteClose}
-          fullScreen={true}
-        /> : <></>}
       <View style={styles.bottomNavbarView}>
         <View style={styles.leftSideView}>
           <SliderButtonSelect

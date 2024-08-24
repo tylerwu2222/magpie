@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 
 // components
 import { Card } from 'react-native-paper'
@@ -13,21 +13,17 @@ import { Colors } from '@/assets/constants/Colors';
 import { cardDimensions, magpieDimensions } from '@/assets/constants/magpieDimensions';
 
 // types
-import { defaultEntryData, entryDataType } from '@/src/types/data';
+// import { defaultEntryData, entryDataType } from '@/src/types/data';
 import CardContent from '../CardContent';
 import CloseIconButton from '@/src/components/buttons/common_icon_buttons/CloseIconButton';
 
-import { addNote, deleteNoteByID, updateNoteByID } from '@/src/api/notes';
-import DeleteIconButton from '@/src/components/buttons/common_icon_buttons/DeleteIconButton';
-import { HomeContext } from '@/app/home';
+import { addNote, updateNoteByID } from '@/src/api/notes';
 
-interface EditableCardProps {
-  entryData: entryDataType | undefined,
+interface NewEditableCardProps {
   mode: 'elevated' | 'outlined' | 'contained',
 
   isFullscreen: boolean,
-  isSharable: boolean,
-  isNewNote: boolean,
+  // isSharable: boolean,
 
   cardColorDict: {
     'background': string,
@@ -37,25 +33,24 @@ interface EditableCardProps {
   cardPaddingHorizontal: number,
   cardPaddingVertical: number,
   onPressFn: () => void,
-  onLongPressFn: () => void,
+  // onLongPressFn: () => void,
   closeCardFn: () => void,
 }
 
-// editable card, default fullscreen
-const EditableCard = (
+
+// new note, editable card, data from context
+const NewEditableCard = (
   {
-    entryData = defaultEntryData,
     mode = 'outlined',
     isFullscreen = true,
-    isSharable = true,
-    isNewNote = false,
+    // isSharable = true,
     cardColorDict = Colors.lightCard,
     cardPaddingHorizontal = 10,
     cardPaddingVertical = 10,
     onPressFn = () => { },
-    onLongPressFn = () => { },
+    // onLongPressFn = () => { },
     closeCardFn = () => { }
-  }: Partial<EditableCardProps>
+  }: Partial<NewEditableCardProps>
 ) => {
 
   const styles = StyleSheet.create({
@@ -81,70 +76,62 @@ const EditableCard = (
     }
   })
 
-  // split entryData into parts to allow for partial editing
-  const [title, setTitle] = useState<string | undefined>(entryData?.title);
-  const [subtitle, setSubtitle] = useState<string | undefined>(entryData?.subtitle);
-  const [description, setDescription] = useState<string | undefined>(entryData?.description);
+  // initialize new note content as empty
+  // const [newNoteEmpty, setNewNoteEmpty] = useState(true);
+  const [newNoteContent, setNewNoteContent] = useState({
+    user_id: 1, // NEED TO UPDATE WITH REAL ID LATER
+    title: '',
+    subtitle: '',
+    description: '',
+  });
 
-  // note content change handlers
-  const handleChangeContent = (
-    columnName: string,
-    updatedContent: string
-  ) => {
-    // only update note if note new note
-    if (!isNewNote) {
-      if (entryData?.id) {
-        updateNoteByID(entryData.id, columnName, updatedContent);
-      }
-    }
-  };
+  const getNoteLength = () => {
+    return newNoteContent.title.length + newNoteContent.subtitle.length + newNoteContent.description.length;
+  }
+
   const handleChangeTitle = (updatedText: string) => {
-    // update FE state
-    setTitle(updatedText);
-    // update BE state
-    handleChangeContent('title', updatedText);
+    setNewNoteContent({ ...newNoteContent, title: updatedText });
   };
   const handleChangeSubtitle = (updatedText: string) => {
-    setSubtitle(updatedText);
-    handleChangeContent('subtitle', updatedText);
+    setNewNoteContent({ ...newNoteContent, subtitle: updatedText });
   };
   const handleChangeDescription = (updatedText: string) => {
-    setDescription(updatedText);
-    handleChangeContent('description', updatedText);
+    setNewNoteContent({ ...newNoteContent, description: updatedText, });
   };
 
-  const handleDeleteNote = async () => {
-    await deleteNoteByID(entryData.id); // delete note from BE
-    await closeCardFn(); // close card
-  };
+  const closeNewCardFn = async () => {
+    // add new note to BE if there is content
+    if (getNoteLength() > 0) {
+      await addNote(newNoteContent);
+    }
+    await closeCardFn(); // visually close new note
+  }
 
   const topRightCardIcons = [
-    <CloseIconButton contentSize={30} onPressFn={closeCardFn} />,
+    <CloseIconButton contentSize={30} onPressFn={closeNewCardFn} />,
   ];
-
   const bottomCardIcons = [
     // <FavoriteIconButton contentSize={20} />,
-    <DeleteIconButton contentSize={20} onPressFn={handleDeleteNote} />,
     <AddIconButton contentSize={20} onPressFn={() => { console.log('pressed add btn') }} />,
-    <ShareIconButton contentSize={20} />
-  ];
+    <ShareIconButton contentSize={20} />];
+
 
   return (
     <Card
       mode={mode}
-      onPress={() => {
-        onPressFn();
-      }}
-      onLongPress={onLongPressFn}
+      // onPress={() => {
+      //   onPressFn();
+      // }}
+      // onLongPress={onLongPressFn}
       style={styles.card}
     >
       <CardContent
         topRightCardIcons={topRightCardIcons}
         bottomCardIcons={bottomCardIcons}
         styles={styles}
-        title={title}
-        subtitle={subtitle}
-        description={description}
+        title={newNoteContent.title}
+        subtitle={newNoteContent.subtitle}
+        description={newNoteContent.description}
         titleChangeFn={handleChangeTitle}
         subtitleChangeFn={handleChangeSubtitle}
         descriptionChangeFn={handleChangeDescription}
@@ -153,4 +140,4 @@ const EditableCard = (
   )
 }
 
-export default EditableCard
+export default NewEditableCard

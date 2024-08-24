@@ -9,6 +9,7 @@ import { Colors } from '@/assets/constants/Colors';
 
 // HomeTop navbar icons
 import SearchBar from '../../inputs/textInput/SearchBar';
+import { magpieDimensions, navbarDimensions } from '@/assets/constants/magpieDimensions';
 
 // import PencilIconButton from '../../buttons/common_icon_buttons/PencilIconButton';
 // import AddCollectionIconButton from '../../buttons/common_icon_buttons/AddCollectionIconButton';
@@ -26,7 +27,7 @@ interface HomeTopNavbarProps {
 
 const HomeTopNavbar = (
   {
-    navbarHeight = 60,
+    navbarHeight = navbarDimensions.topNavbarHeight,
     paddingH = 20
   }: Partial<HomeTopNavbarProps>
 ) => {
@@ -38,7 +39,7 @@ const HomeTopNavbar = (
       // position: 'absolute',
       // top: 0,
       // left: 0,
-      width: '100%',
+      width: magpieDimensions.vw,
       height: navbarHeight,
       paddingHorizontal: paddingH,
       alignItems: 'center',
@@ -57,7 +58,6 @@ const HomeTopNavbar = (
   const navbarIcons = ['view', 'edit', 'new_collection', 'new_collection']
 
   const {
-    notes,
     homeSearchQuery,
     setHomeSearchQuery
   } = useContext(HomeContext);

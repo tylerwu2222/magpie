@@ -1,4 +1,4 @@
-import { entryDataType, setEntryDataType } from "@/src/types/data";
+import { entryDataType, newEntryDataType, setEntryDataType } from "@/src/types/data";
 
 
 // function for getting all notes
@@ -45,6 +45,46 @@ const getNoteByID = async (
   }
 }
 
+// function for adding new note
+export const addNote = async (
+  newNoteContent: newEntryDataType
+) => {
+
+  // get update time
+  const create_update_time = new Date();
+
+  const newNote = {
+    user_id: newNoteContent.user_id,
+    title: newNoteContent.title,
+    subtitle: newNoteContent.subtitle,
+    description: newNoteContent.description,
+    created_at: create_update_time,
+    updated_at: create_update_time
+  }
+  // console.log('adding new note with data', newNote);
+  try {
+    const response = await fetch(`http://localhost:5000/notes`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newNote)
+      },
+
+    );// Handle the response
+    if (response.ok) {
+      const data = await response.json();
+      // console.log('addNote data:', data);
+      return data;
+    } else {
+      console.error('Failed to add new note');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
 // function for updating a note by ID
 export const updateNoteByID = async (
   noteId: number | undefined,
@@ -68,8 +108,6 @@ export const updateNoteByID = async (
     'updated_at': update_time
   };
 
-  // console.log('updated note', updatedNote, 'at', update_time);
-
   try {
     const response = await fetch(`http://localhost:5000/notes/${noteId}`,
       {
@@ -82,6 +120,7 @@ export const updateNoteByID = async (
     );// Handle the response
     if (response.ok) {
       const data = await response.json();
+      return data;
       // console.log('Note updated:', data);
     } else {
       console.error('Failed to update note with ID', noteId);
@@ -91,3 +130,26 @@ export const updateNoteByID = async (
   }
 }
 
+export const deleteNoteByID = async (
+  noteId: number | undefined,
+) => {
+
+  try {
+    const response = await fetch(`http://localhost:5000/notes/${noteId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );// Handle the response
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      console.error('Failed to delete note with ID', noteId);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};

@@ -85,6 +85,7 @@ const StaticCard = (
       // minWidth: 260,
       width: cardDimensions.width,
       maxHeight: cardDimensions.height,
+      margin: 5,
       overflow: 'hidden'
     },
     cardTitle: {

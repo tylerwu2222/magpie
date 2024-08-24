@@ -1,22 +1,29 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React, { useState, useEffect, createContext, Dispatch, SetStateAction } from 'react'
 
+import NewEditableCardModal from '@/src/components/modals/NewEditableCardModal/NewEditableCardModal';
 import BottomNavbar from '@/src/components/navbars/BottomNavbar/BottomNavbar';
 import ItemView from '@/src/components/composite_components/views/ItemView/ItemView';
 import HomeTopNavbar from '@/src/components/navbars/HomeTopNavbar/HomeTopNavbar';
-import { defaultEntryData, entryDataType, setEntryDataType } from '@/src/types/data';
+import { defaultEntryData, entryDataType, setEntryDataType, newEntryDataType, setNewEntryDataType } from '@/src/types/data';
 // import EditableCardModal from '@/src/components/modals/EditableCardModal/EditableCardModal';
 
-import { fetchNotes, updateNoteByID } from '@/src/api/notes';
+import { fetchNotes, addNote } from '@/src/api/notes';
+
+
 
 interface HomeContextProps {
   homeItemViewType: string,
   setHomeItemViewType: Dispatch<SetStateAction<string>>,
   displayedNotes: Array<entryDataType>,
   setDisplayedNotes: setEntryDataType,
+  newNoteVisible: boolean,
+  setNewNoteVisible: Dispatch<SetStateAction<boolean>>,
+  // newNoteEmpty: boolean,
+  // setNewNoteEmpty: Dispatch<SetStateAction<boolean>>,
+  // newNoteContent: newEntryDataType,
+  // setNewNoteContent: Dispatch<SetStateAction<newEntryDataType>>
   fetchSetNotes: () => void,
-  // editableCardModalVisible: boolean,
-  // setEditableCardModalVisible: Dispatch<SetStateAction<boolean>>,
   homeSearchQuery: string,
   setHomeSearchQuery: Dispatch<SetStateAction<string>>,
 }
@@ -37,14 +44,25 @@ export default function Home() {
   // notes
   const [displayedNotes, setDisplayedNotes] = useState<Array<entryDataType>>([]);
   const [allNotes, setAllNotes] = useState<Array<entryDataType>>([]);
+  const [newNoteVisible, setNewNoteVisible] = useState(false);
+  // const [newNoteEmpty, setNewNoteEmpty] = useState(true);
+  // const [newNoteContent, setNewNoteContent] = useState<newEntryDataType>(
+  //   {
+  //     title: 'title',
+  //     subtitle: 'title',
+  //     description: 'title',
+  //   }
+  // );
 
   // filtering
   const [homeSearchQuery, setHomeSearchQuery] = useState<string>('');
 
 
-  // function for fetching and setting notes
+  // UPDATE
   const fetchSetNotes = async () => {
+    // console.log('FSN');
     const data = await fetchNotes();
+    console.log('fetched data',data)
     setAllNotes(data);
     setDisplayedNotes(data);
   };
@@ -69,6 +87,15 @@ export default function Home() {
     setDisplayedNotes(checkNotesForQuery(homeSearchQuery));
   }, [homeSearchQuery]);
 
+
+  // CREATE
+  const handleNewNoteClose = async () => {
+    console.log('setting new card visibility to false');
+    await fetchSetNotes();
+    setNewNoteVisible(false);
+  };
+
+
   return (
     <HomeContext.Provider
       value={{
@@ -77,12 +104,17 @@ export default function Home() {
         displayedNotes,
         setDisplayedNotes,
         fetchSetNotes,
-        // editableCardModalVisible,
-        // setEditableCardModalVisible,
+        newNoteVisible,
+        setNewNoteVisible,
         homeSearchQuery,
         setHomeSearchQuery
       }}>
       <View style={styles.homeView}>
+        <NewEditableCardModal
+          visible={newNoteVisible}
+          modalDismissFn={handleNewNoteClose}
+          fullScreen={true}
+        />
         {/* search bar */}
         <HomeTopNavbar />
         {/* item view */}

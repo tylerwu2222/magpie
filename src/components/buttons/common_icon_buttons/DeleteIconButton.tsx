@@ -8,7 +8,8 @@ import { basicButtonType } from '@/src/types/components'
 export default function DeleteIconButton({
     isDisabled,
     contentSize = 40,
-    buttonColorDict = Colors.deleteButton
+    buttonColorDict = Colors.deleteButton,
+    onPressFn = () => { }
 }: basicButtonType) {
     return (
         <CustomIconButton
@@ -17,6 +18,7 @@ export default function DeleteIconButton({
             isDisabled={isDisabled}
             iconSize={contentSize}
             buttonColorDict={buttonColorDict}
+            onPressFn={onPressFn}
         />
     )
 }

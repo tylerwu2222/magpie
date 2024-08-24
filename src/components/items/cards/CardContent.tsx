@@ -6,17 +6,13 @@ import { Colors } from '@/assets/constants/Colors';
 import React, { ReactElement, Dispatch, SetStateAction } from 'react'
 import { entryDataType } from '@/src/types/data';
 
-interface CardContent {
+interface CardContentProps {
     entryData: entryDataType | undefined,
     topRightCardIcons: Array<ReactElement>,
     bottomCardIcons: Array<ReactElement>,
     title: string | undefined,
-    // setTitle: Dispatch<SetStateAction<string | undefined>>,
-    // titleChangeFn: () => {},
     subtitle: string | undefined,
-    // setSubtitle: Dispatch<SetStateAction<string | undefined>>,
     description: string | undefined,
-    // setDescription: Dispatch<SetStateAction<string | undefined>>,
     titleChangeFn: (text: string) => void,
     subtitleChangeFn: (text: string) => void,
     descriptionChangeFn: (text: string) => void,
@@ -34,9 +30,6 @@ export default function CardContent({
     title,
     subtitle,
     description,
-    // setTitle,
-    // setSubtitle,
-    // setDescription,
     titleChangeFn,
     subtitleChangeFn,
     descriptionChangeFn,
@@ -44,7 +37,7 @@ export default function CardContent({
     isEditable = false,
     hasImage = false,
     styles
-}: Partial<CardContent>) {
+}: Partial<CardContentProps>) {
     const additionalStyles = StyleSheet.create({
         topRightIconsView: {
             position: 'absolute',

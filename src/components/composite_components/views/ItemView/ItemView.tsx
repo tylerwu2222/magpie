@@ -3,8 +3,10 @@ import React, { useState, useEffect, useContext } from 'react'
 import { HomeContext } from '@/app/home';
 
 import StaticCard from '@/src/components/items/cards/StaticCard/StaticCard';
+// import { FlashList } from "@shopify/flash-list";
+import { MasonryFlashList } from "@shopify/flash-list";
 
-import { cardDimensions } from '@/assets/constants/magpieDimensions';
+import { cardDimensions, magpieDimensions, navbarDimensions } from '@/assets/constants/magpieDimensions';
 
 import { entryDataType } from '@/src/types/data';
 
@@ -23,10 +25,12 @@ const ItemView = ({
       paddingHorizontal: 5
     },
     deckContainerView: {
-      display: 'flex',
-      flexDirection: 'row',
-      gap: cardDimensions.width / 10,
-      flexWrap: 'wrap',
+      height: magpieDimensions.vh - navbarDimensions.bottomNavbarHeight - navbarDimensions.topNavbarHeight,
+      overflow: 'scroll'
+      // display: 'flex',
+      // flexDirection: 'row',
+      // gap: cardDimensions.width / 10,
+      // flexWrap: 'wrap',
       // alignItems: 'center',
       // justifyContent: 'center',
     },
@@ -42,16 +46,20 @@ const ItemView = ({
     <View style={styles.itemViewView}>
       {/* modify display style dynamically*/}
       <View style={styles.deckContainerView}>
-        {displayedNotes ?
-          displayedNotes.map((note: entryDataType, index: number) => (
+        <MasonryFlashList
+          // key={displayedNotes.length}
+          data={displayedNotes}
+          numColumns={2}
+          estimatedItemSize={cardDimensions.height}
+          renderItem={({ item }) =>
             <StaticCard
-              key={index}
-              entryData={note}
+              key={item.id}
+              entryData={item}
               isInteractable={true}
-            // onPressFn={}
+            // additionalStyle={{ margin: 5 }}
             />
-          )) : null
-        }
+          }
+        />
       </View>
       {/* <GridViewDeck notes={notes}/> */}
       {/* {itemView} */}

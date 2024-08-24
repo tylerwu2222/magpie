@@ -5,29 +5,25 @@ import { Portal, Modal } from 'react-native-paper';
 // import Modal from "react-native-modal";
 // import { BlurView } from 'expo-blur';
 
-import BlurOverlayContext, { BlurOverlayProvider } from '@/src/providers/OverlayProviders/BlurOverlayProvider';
+// import BlurOverlayContext, { BlurOverlayProvider } from '@/src/providers/OverlayProviders/BlurOverlayProvider';
 
-import EditableCard from '../../items/cards/EditableCard/EditableCard'
 import { cardDimensions, magpieDimensions } from '@/assets/constants/magpieDimensions';
 import { entryDataType } from '@/src/types/data';
+import NewEditableCard from '../../items/cards/EditableCard/NewEditableCard';
 
 // use BlurOverlayProvider with EditableCard as child.
 
-interface EditableCardModalProps {
-    entryData: entryDataType | undefined,
+interface NewEditableCardModalProps {
     visible: boolean,
     fullScreen: boolean,
-    isNewNote: boolean,
     modalDismissFn: () => void
 }
 
-const EditableCardModal = ({
-    entryData,
+const NewEditableCardModal = ({
     visible = false,
     fullScreen = true,
-    isNewNote = false,
     modalDismissFn = () => { }
-}: Partial<EditableCardModalProps>
+}: Partial<NewEditableCardModalProps>
 ) => {
 
     // const {
@@ -35,15 +31,12 @@ const EditableCardModal = ({
     // } = useContext(BlurOverlayContext);
 
     const styles = StyleSheet.create({
-        // centering here DN work
         modalContainer: {
             display: 'flex',
             backgroundColor: 'maroon',
             justifyContent: 'center',
             alignItems: 'center'
         },
-
-        // already centered?
         cardModal: {
             alignSelf: fullScreen ? 'flex-start' : 'center',
             width: cardDimensions.width,
@@ -65,14 +58,12 @@ const EditableCardModal = ({
                     }}
                     contentContainerStyle={styles.cardModal}
                 >
-                    <EditableCard
-                        entryData={entryData}
+                    <NewEditableCard
                         closeCardFn={() => {
                             modalDismissFn();
                             // hideBlurOverlay();
                         }}
                         isFullscreen={fullScreen}
-                        isNewNote={isNewNote}
                     />
                 </Modal>
             </Portal>
@@ -82,4 +73,4 @@ const EditableCardModal = ({
     )
 }
 
-export default EditableCardModal
+export default NewEditableCardModal

@@ -14,3 +14,8 @@ export const cardDimensions = {
     subtitleFontSize: 18,
     textFontSize: 15
 }
+
+export const navbarDimensions = {
+    topNavbarHeight: 60,
+    bottomNavbarHeight: 80
+}

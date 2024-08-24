@@ -6,6 +6,7 @@ import ProfileButton from '../../buttons/ProfileButton';
 
 // import { Typography } from '@/constants/Typography';
 import { Colors } from '@/assets/constants/Colors';
+import { magpieDimensions } from '@/assets/constants/magpieDimensions';
 // import { magpieDimensions } from '@/assets/constants/magpieDimensions';
 
 const Navbar = () => {
@@ -24,7 +25,8 @@ export default Navbar;
 
 const styles = StyleSheet.create({
     navbarView: {
-        width: '100%',
+        width: magpieDimensions.vw,
+        // height:
         paddingHorizontal: '5%',
         flexDirection: 'row',
         alignItems: 'center',

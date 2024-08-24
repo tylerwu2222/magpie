@@ -46,8 +46,6 @@ const SliderButtonSelect = ({
       paddingHorizontal: iconPadding / 2,
       paddingVertical: iconPadding / 2,
       borderRadius: iconBorderRadius,
-      // width: 20,
-      // height: sliderOpen ? numberButtonsShown * buttonHeight : buttonHeight,
       overflow: 'hidden',
       backgroundColor: sliderBackgroundColor
     },
@@ -88,7 +86,17 @@ const SliderButtonSelect = ({
     return [...indexToEnd, ...startToIndex];
   }
 
+  const handleSliderOpen = () => {
+    setSliderOpen(true);
+  }
+
+  const handleSliderClose = () => {
+    setSliderOpen(false)
+    setHighlightedIndex(null);
+  }
+
   const pan = Gesture.Pan()
+    // .onBegin(() => handleSliderOpen())
     .onUpdate((event) => {
       // update highlighted index
       const sliderOffset = (iconList.length + 2.5) * iconHeight / 2;
@@ -113,46 +121,43 @@ const SliderButtonSelect = ({
           setDynamicIconList(moveToFront(dynamicIconList, highlightedIndex));
         }
       }
-      // setSliderOpen(false);
+      // handleSliderClose();
     });
   ;
 
-  // if triggered by highlighted index change, will call onchange function as user is hovering
-  // if selectedIcon, then
-  // useEffect(() => {
-
-  // }, [highlightedIndex]);
-
-  const handleSliderOpen = () => {
-    setSliderOpen(true);
-  }
-
-  const handleSliderClose = () => {
-    setSliderOpen(false)
-    setHighlightedIndex(null);
-  }
-
   // animate slider view, and also translate Y, so slider u=opens upwards
   return (
-    <MotiView
-      style={styles.sliderButtonSelectView}
-      animate={{
-        height: sliderOpen ?
-          paddedListViewHeight : //
-          trueIconHeight + iconPadding,
-        translateY: openDirection == 'up' ? (sliderOpen ? -(iconList.length * iconHeight / 2 + iconPadding) : 0) :
-          (sliderOpen ? (iconList.length * iconHeight / 2 + iconPadding) : 0)
-      }}
-    >
-      <Pressable
-        onPressIn={handleSliderOpen}
-        onPressOut={handleSliderClose}
+    <GestureDetector gesture={pan}>
+      {/* outer panel */}
+      <MotiView
+        style={styles.sliderButtonSelectView}
+        animate={{
+          height: sliderOpen ?
+            paddedListViewHeight : //
+            trueIconHeight + iconPadding,
+          translateY: openDirection == 'up' ? (sliderOpen ? -(iconList.length * iconHeight / 2 + iconPadding) : 0) :
+            (sliderOpen ? (iconList.length * iconHeight / 2 + iconPadding) : 0)
+        }}
+        transition={{
+          type: 'timing',
+          duration: 250,
+          // delay: sliderOpen ? 100 : 0, // Add delay when opening the slider
+        }}
       >
-        <GestureDetector gesture={pan}>
+        <Pressable
+          onPressIn={handleSliderOpen}
+          onPressOut={handleSliderClose}
+        >
+          {/* icon lists */}
           <MotiView style={styles.iconListView}
             animate={{
               translateY: openDirection == 'up' ? (sliderOpen ? 0 : -((iconList.length - 1) * (trueIconHeight))) :
                 (sliderOpen ? 0 : (iconList.length - 1) * (trueIconHeight))
+            }}
+            transition={{
+              type: 'timing',
+              duration: 250,
+              // delay: sliderOpen ? 100 : 0, // Add delay when opening the slider
             }}
           >
             {dynamicIconList.map((icon, index) => {
@@ -162,9 +167,9 @@ const SliderButtonSelect = ({
             }
             )}
           </MotiView>
-        </GestureDetector>
-      </Pressable>
-    </MotiView>
+        </Pressable>
+      </MotiView>
+    </GestureDetector>
   )
 }
 
