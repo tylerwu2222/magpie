@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import React, { useState, useContext } from 'react';
+import { StyleSheet, View } from 'react-native';
+import React, { useState, useRef, useContext } from 'react';
 import BlurOverlayContext from '@/src/providers/OverlayProviders/BlurOverlayProvider';
 
 // components
@@ -17,8 +17,10 @@ import { cardDimensions } from '@/assets/constants/magpieDimensions';
 // data
 // import dummyCollection from '@/assets/data/dummyData/dummyCollection.json';
 import { entryDataType } from '@/src/types/data';
-import CardContent from '../CardContent';
+import StaticCardContent from '../StaticCardContent';
 import { HomeContext } from '@/app/home';
+import DraggableCardModal from '@/src/components/modals/DraggableCardModal/DraggableCardModal';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
 interface StaticCardProps {
   entryData: entryDataType | undefined,
@@ -39,6 +41,7 @@ interface StaticCardProps {
   cardPaddingVertical: number,
   onPressFn: () => void,
   onLongPressFn: () => void,
+  onPressOutFn: () => void,
   // additionalStyle?: React.CSSProperties
   additionalStyle: any
 }
@@ -60,25 +63,27 @@ const StaticCard = (
     cardPaddingVertical = 10,
     onPressFn = () => { },
     onLongPressFn = () => { },
+    onPressOutFn = () => { },
     additionalStyle
   }: Partial<StaticCardProps>
 ) => {
 
   const [editableCardModalVisible, setEditableCardModalVisible] = useState(false);
+  const [draggableCardModalVisible, setDraggableCardModalVisible] = useState(false);
+  // const staticCardRef = useRef<View | null>(null);
+  const { fetchSetNotes } = useContext(HomeContext);
+  // const [cardPosition, setCardPosition] = useState({ x: 0, y: 0, width: 0, height: 0 });
+  const [cardPosition, setCardPosition] = useState({ x: 0, y: 0 });
 
   // const {
   //   showBlurOverlay
   // } = useContext(BlurOverlayContext);
 
-  // const cardIcons = [
-  //   // <FavoriteIconButton contentSize={20} />,
-  //   <AddIconButton contentSize={20} />,
-  //   <ShareIconButton contentSize={20} />];
-
   const styles = StyleSheet.create({
     card: {
-      backgroundColor: cardColorDict.background,
-      borderColor: cardColorDict.border,
+      backgroundColor: draggableCardModalVisible ? Colors.lightCardDisabled.background : cardColorDict.background,
+      // borderColor: 'transparent',
+      borderColor: draggableCardModalVisible ? Colors.lightCardDisabled.border : cardColorDict.border,
       borderRadius: cardDimensions.borderRadius,
       borderTopLeftRadius: 0,
       borderBottomRightRadius: 0,
@@ -101,39 +106,88 @@ const StaticCard = (
     }
   })
 
-  const { fetchSetNotes } = useContext(HomeContext);
+
+  const longPress = Gesture.LongPress()
+    .onBegin((e) => {
+      // console.log('static card long pressed');
+      setCardPosition({ x: e.absoluteX, y: e.absoluteY });
+    });
+
+  const pan = Gesture.Pan()
+    .onBegin((e) => {
+      // console.log('static card panned');
+      setCardPosition({ x: e.absoluteX, y: e.absoluteY });
+    })
+    .onChange((e) => {
+      setCardPosition({ x: e.absoluteX, y: e.absoluteY });
+    })
+    .onEnd(() => {
+      setCardPosition({ x: 0, y: 0 });
+    })
+    ;
+
+  const composed = Gesture.Simultaneous(longPress, pan)
 
   // make ECM visible on click (if interactable)
   return (
     <>
-      <EditableCardModal
-        entryData={entryData}
-        visible={editableCardModalVisible}
-        modalDismissFn={() => {
-          setEditableCardModalVisible(false); // close modal
-          fetchSetNotes(); // update all notes if changes made
-        }}
-        fullScreen={true}
-      />
-      <Card
-        mode={mode}
-        onPress={() => {
-          if (isInteractable) {
-            setEditableCardModalVisible(true);
-            onPressFn();
-          }
-        }}
-        onLongPress={onLongPressFn}
-        style={[styles.card, additionalStyle]}
+      <GestureDetector
+        // gesture={longPress}
+        gesture={composed}
       >
-        <CardContent
-          entryData={entryData}
-          // bottomCardIcons={cardIcons}
-          showPlaceholders={false}
-          hasImage={hasImage}
-          styles={styles}
-        />
-      </Card >
+        <>
+          <EditableCardModal
+            entryData={entryData}
+            visible={editableCardModalVisible}
+            modalDismissFn={() => {
+              setEditableCardModalVisible(false); // close modal
+              fetchSetNotes(); // update all notes if changes made
+            }}
+            fullScreen={true}
+          />
+          <DraggableCardModal
+            entryData={entryData}
+            visible={draggableCardModalVisible}
+            // visible={true}
+            modalDismissFn={() => {
+              // setDraggableCardModalVisible(false);
+              fetchSetNotes();
+            }}
+            // startingPosition={getCurrentPosition()}
+            cardPosition={cardPosition}
+          />
+          <Card
+            mode={mode}
+            onPress={() => {
+              if (isInteractable) {
+                setEditableCardModalVisible(true);
+                onPressFn();
+              }
+            }}
+            onLongPress={() => {
+              if (isInteractable) {
+                setDraggableCardModalVisible(true);
+                onLongPressFn();
+              }
+            }}
+            onPressOut={() => {
+              if (isInteractable) {
+                setDraggableCardModalVisible(false);
+                onPressOutFn();
+              }
+            }}
+            style={[styles.card, additionalStyle]}
+          >
+            <StaticCardContent
+              entryData={entryData}
+              // bottomCardIcons={cardIcons}
+              showPlaceholders={false}
+              hasImage={hasImage}
+              styles={styles}
+            />
+          </Card >
+        </>
+      </GestureDetector>
     </>
   )
 }

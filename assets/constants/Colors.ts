@@ -34,6 +34,7 @@ const magpie_blue_medium_dark = '#42bbd9';
 const magpie_blue = '#0a7ea4';
 
 // greys (buttons, text)
+const magpie_white = '#fefefe';
 const magpie_grey_lightest = '#fCfCfC';
 const magpie_grey_lighter = '#F9F9F9';
 const magpie_grey_light = '#D9D9D9';
@@ -112,8 +113,13 @@ export const Colors = {
   // card color themes
   lightCard: {
     background: magpie_logo_white,
-    border: magpie_logo_black,
+    border: magpie_grey_darker,
     text: magpie_grey_dark
+  },
+  lightCardDisabled: {
+    background: magpie_grey_medium,
+    border: magpie_grey_darker,
+    text: magpie_grey_medium_dark
   },
 
   // button color themes
@@ -154,6 +160,13 @@ export const Colors = {
     toggle: magpie_blue,
     text: magpie_blue
   },
+  favoriteButtonFilled: {
+    // default: magpie_grey_light_medium,
+    default: magpie_blue_medium,
+    ripple: magpie_blue_medium,
+    toggle: magpie_blue_light,
+    text: magpie_white
+  },
   redAccentButton: {
     default: magpie_red_light,
     ripple: magpie_red_lightest,
@@ -161,10 +174,16 @@ export const Colors = {
     text: magpie_red
   },
   deleteButton: {
-    default: magpie_grey_light_medium,
-    ripple: magpie_grey_medium,
-    toggle: category_colors.red,
-    text: category_colors.red
+    default: 'transparent',
+    ripple: magpie_red_medium,
+    toggle: magpie_red,
+    text: magpie_red
+  },
+  deleteButtonFilled: {
+    default: magpie_red,
+    ripple: magpie_red_medium,
+    toggle: magpie_red_light,
+    text: magpie_white
   },
 
   redText: category_colors.red,

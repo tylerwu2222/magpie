@@ -7,7 +7,7 @@ import { Portal } from 'react-native-paper';
 import { MotiPressable } from 'moti/interactions';
 import AnimatedCardContent from '../AnimatedCardContent';
 import EditableCardModal from '@/src/components/modals/EditableCardModal/EditableCardModal';
-import { PanGestureHandler, PanGestureHandlerGestureEvent, GestureDetector, GestureEvent, Gesture } from 'react-native-gesture-handler';
+import { PanGestureHandler, PanGestureHandlerGestureEvent } from 'react-native-gesture-handler';
 
 // styles
 import { Colors } from '@/assets/constants/Colors';
@@ -21,18 +21,19 @@ import { HomeContext } from '@/app/home';
 
 interface DraggableCardProps {
   entryData: entryDataType | undefined,
-  // imageSource?: string,
+  mode: 'elevated' | 'outlined' | 'contained',
+  imageSource?: string,
 
-  // hasImage: boolean,
+  hasImage: boolean,
   isSharable: boolean,
   isInteractable: boolean,
+  isDraggable: boolean,
 
   cardColorDict: {
     'background': string,
     'border': string,
     'text'?: string
   },
-  cardPosition: { x: number, y: number },
   cardPaddingHorizontal: number,
   cardPaddingVertical: number,
   onPressFn: () => void,
@@ -44,17 +45,18 @@ interface DraggableCardProps {
 }
 
 // static card, opens editable card if interactable
-const DraggableCard = (
+const DraggableCardOld = (
   {
     entryData,
-    // imageSource = '',
+    mode = 'outlined',
+    imageSource = '',
 
-    // hasImage = false,
+    hasImage = false,
     isSharable = true,
     isInteractable = false,
+    isDraggable = false,
 
     cardColorDict = Colors.lightCard,
-    cardPosition = { x: 0, y: 0 },
     cardPaddingHorizontal = 10,
     cardPaddingVertical = 10,
     onPressFn = () => { },
@@ -65,7 +67,7 @@ const DraggableCard = (
   }: Partial<DraggableCardProps>
 ) => {
 
-  // const [editableCardModalVisible, setEditableCardModalVisible] = useState(false);
+  const [editableCardModalVisible, setEditableCardModalVisible] = useState(false);
 
   // const {
   //   showBlurOverlay
@@ -78,9 +80,6 @@ const DraggableCard = (
 
   const styles = StyleSheet.create({
     card: {
-      position: 'absolute',
-      top: cardPosition.y - cardDimensions.height * 2,
-      left: cardPosition.x - cardDimensions.width/2,
       backgroundColor: cardColorDict.background,
       borderWidth: 1,
       // borderColor: cardColorDict.border,
@@ -107,46 +106,92 @@ const DraggableCard = (
   })
 
   const { fetchSetNotes } = useContext(HomeContext);
-  const [isLongPressed, setIsLongPressed] = useState<boolean>(true);
+  const [isLongPressed, setIsLongPressed] = useState<boolean>(false);
+  const [translateX, setTranslateX] = useState(0);
+  const [translateY, setTranslateY] = useState(0);
+
+  // only translate if long press activated
+  const onGestureEvent = (event: PanGestureHandlerGestureEvent) => {
+    if (isLongPressed) {
+      setTranslateX(event.nativeEvent.translationX);
+      setTranslateY(event.nativeEvent.translationY);
+    }
+  };
+
+  const handleLongPress = () => {
+    console.log('Drag card long pressed');
+    setIsLongPressed(true);
+  }
+
+  const handlePressOut = () => {
+    setIsLongPressed(false);
+    setTranslateX(0);
+    setTranslateY(0);
+  }
 
   return (<>
-    <MotiPressable
-      onLongPress={() => {
-        // handleLongPress();
-        onLongPressFn();
+    <EditableCardModal
+      entryData={entryData}
+      visible={editableCardModalVisible}
+      modalDismissFn={() => {
+        setEditableCardModalVisible(false); // close modal
+        fetchSetNotes(); // update all notes if changes made
       }}
-      onPressOut={() => {
-        // handlePressOut();
-        onPressOutFn();
-      }}
-      from={{
-        // scale: 1,
-        borderColor: 'transparent',
-        opacity: 1,
-        // backgroundColor: 'lightblue'
-        // position: 'relative'
-      }}
-      animate={{
-        // scale: isLongPressed ? 0.8 : 1,
-        borderColor: isLongPressed ? cardColorDict.border : 'transparent',
-        opacity: isLongPressed ? 0.98 : 1,
-        // backgroundColor: isLongPressed ? '' : 'lightblue',
-        // position: isLongPressed ? 'absolute': 'relative'
-      }}
-      transition={{
-        type: 'spring'
-      }}
-      style={[styles.card, additionalStyle]}
+      fullScreen={true}
+    />
+    <PanGestureHandler
+      onGestureEvent={onGestureEvent}
+    // onHandlerStateChange={onHandlerStateChange}
     >
-      <AnimatedCardContent
-        entryData={entryData}
-        // bottomCardIcons={cardIcons}
-        showPlaceholders={false}
-        styles={styles}
-      />
-    </MotiPressable>
+      <MotiPressable
+    onPress={() => {
+      if (isInteractable) {
+        setEditableCardModalVisible(true);
+        onPressFn();
+      }
+    }}
+    onLongPress={() => {
+      handleLongPress();
+      onLongPressFn();
+    }}
+    onPressOut={() => {
+      handlePressOut();
+      onPressOutFn();
+    }}
+    from={{
+      scale: 1,
+      borderColor: 'transparent',
+      opacity: 1,
+      // backgroundColor: 'lightblue',
+      translateX: translateX,
+      translateY: translateY
+      // position: 'relative'
+    }}
+    animate={{
+      scale: isLongPressed ? 0.8 : 1,
+      borderColor: isLongPressed ? 'black' : 'transparent',
+      opacity: isLongPressed ? 0.98 : 1,
+      // backgroundColor: isLongPressed ? '' : 'lightblue',
+      translateX: translateX,
+      translateY: translateY
+      // position: isLongPressed ? 'absolute': 'relative'
+    }}
+    transition={{
+      type: 'spring'
+    }}
+    style={[styles.card, additionalStyle]}
+  >
+    <AnimatedCardContent
+      entryData={entryData}
+      // bottomCardIcons={cardIcons}
+      showPlaceholders={false}
+      hasImage={hasImage}
+      styles={styles}
+    />
+  </MotiPressable>
+    </PanGestureHandler>
   </>
   );
 }
 
-export default DraggableCard
+export default DraggableCardOld;

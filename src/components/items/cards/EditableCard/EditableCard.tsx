@@ -14,7 +14,7 @@ import { cardDimensions, magpieDimensions } from '@/assets/constants/magpieDimen
 
 // types
 import { defaultEntryData, entryDataType } from '@/src/types/data';
-import CardContent from '../CardContent';
+import AnimatedCardContent from '../AnimatedCardContent';
 import CloseIconButton from '@/src/components/buttons/common_icon_buttons/CloseIconButton';
 
 import { addNote, deleteNoteByID, updateNoteByID } from '@/src/api/notes';
@@ -138,7 +138,7 @@ const EditableCard = (
       onLongPress={onLongPressFn}
       style={styles.card}
     >
-      <CardContent
+      <AnimatedCardContent
         topRightCardIcons={topRightCardIcons}
         bottomCardIcons={bottomCardIcons}
         styles={styles}

@@ -6,7 +6,7 @@ import { Colors } from '@/assets/constants/Colors';
 import React, { ReactElement, Dispatch, SetStateAction } from 'react'
 import { entryDataType } from '@/src/types/data';
 
-interface CardContentProps {
+interface StaticCardContentProps {
     entryData: entryDataType | undefined,
     topRightCardIcons: Array<ReactElement>,
     bottomCardIcons: Array<ReactElement>,
@@ -23,7 +23,7 @@ interface CardContentProps {
     styles: any
 }
 
-export default function CardContent({
+export default function StaticCardContent({
     entryData,
     topRightCardIcons = [],
     bottomCardIcons = [],
@@ -37,7 +37,7 @@ export default function CardContent({
     isEditable = false,
     hasImage = false,
     styles
-}: Partial<CardContentProps>) {
+}: Partial<StaticCardContentProps>) {
     const additionalStyles = StyleSheet.create({
         topRightIconsView: {
             position: 'absolute',

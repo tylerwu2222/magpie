@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React, { useState, useEffect, createContext, Dispatch, SetStateAction } from 'react'
+import React, { useState, useRef, useEffect, createContext, Dispatch, SetStateAction } from 'react'
 
 import NewEditableCardModal from '@/src/components/modals/NewEditableCardModal/NewEditableCardModal';
 import BottomNavbar from '@/src/components/navbars/BottomNavbar/BottomNavbar';
@@ -9,6 +9,12 @@ import { defaultEntryData, entryDataType, setEntryDataType, newEntryDataType, se
 // import EditableCardModal from '@/src/components/modals/EditableCardModal/EditableCardModal';
 
 import { fetchNotes, addNote } from '@/src/api/notes';
+import DragCornerButtons from '@/src/components/composite_components/buttons/DragCornerButtons/DragCornerButtons';
+import DeleteIconButton from '@/src/components/buttons/common_icon_buttons/DeleteIconButton';
+import AddCollectionIconButton from '@/src/components/buttons/common_icon_buttons/AddCollectionIconButton';
+import PencilIconButton from '@/src/components/buttons/common_icon_buttons/PencilIconButton';
+import ShareIconButton from '@/src/components/buttons/common_icon_buttons/ShareIconButton';
+import { Colors } from '@/assets/constants/Colors';
 
 
 
@@ -26,6 +32,7 @@ interface HomeContextProps {
   fetchSetNotes: () => void,
   homeSearchQuery: string,
   setHomeSearchQuery: Dispatch<SetStateAction<string>>,
+  setCornerButtonsVisible: Dispatch<SetStateAction<boolean>>
 }
 
 export const HomeContext = createContext<HomeContextProps>({} as HomeContextProps);
@@ -34,9 +41,12 @@ export default function Home() {
 
   const styles = StyleSheet.create({
     homeView: {
-      height: '100%'
+      height: '100%',
+      overflow: 'hidden'
     }
   })
+
+  // const itemViewRef = useRef<View>(null)
 
   // state variables that are available to all home children
   const [homeItemViewType, setHomeItemViewType] = useState<string>('grid');
@@ -45,24 +55,23 @@ export default function Home() {
   const [displayedNotes, setDisplayedNotes] = useState<Array<entryDataType>>([]);
   const [allNotes, setAllNotes] = useState<Array<entryDataType>>([]);
   const [newNoteVisible, setNewNoteVisible] = useState(false);
-  // const [newNoteEmpty, setNewNoteEmpty] = useState(true);
-  // const [newNoteContent, setNewNoteContent] = useState<newEntryDataType>(
-  //   {
-  //     title: 'title',
-  //     subtitle: 'title',
-  //     description: 'title',
-  //   }
-  // );
 
   // filtering
   const [homeSearchQuery, setHomeSearchQuery] = useState<string>('');
+  const [cornerButtonsVisible, setCornerButtonsVisible] = useState(false);
 
+  // fill backgrounds
+  const cornerButtons = [
+    <DeleteIconButton buttonColorDict={Colors.deleteButtonFilled} />,
+    <AddCollectionIconButton buttonColorDict={Colors.favoriteButtonFilled} />,
+    <PencilIconButton buttonColorDict={Colors.favoriteButtonFilled} />,
+    <ShareIconButton buttonColorDict={Colors.favoriteButtonFilled} />];
 
   // UPDATE
   const fetchSetNotes = async () => {
     // console.log('FSN');
     const data = await fetchNotes();
-    console.log('fetched data',data)
+    console.log('fetched data', data)
     setAllNotes(data);
     setDisplayedNotes(data);
   };
@@ -91,8 +100,12 @@ export default function Home() {
   // CREATE
   const handleNewNoteClose = async () => {
     console.log('setting new card visibility to false');
+    // update displayed notes
     await fetchSetNotes();
+    // hide card
     setNewNoteVisible(false);
+    // scroll cards to top using ref
+
   };
 
 
@@ -107,8 +120,10 @@ export default function Home() {
         newNoteVisible,
         setNewNoteVisible,
         homeSearchQuery,
-        setHomeSearchQuery
+        setHomeSearchQuery,
+        setCornerButtonsVisible
       }}>
+      {cornerButtonsVisible && <DragCornerButtons buttons={cornerButtons} />}
       <View style={styles.homeView}>
         <NewEditableCardModal
           visible={newNoteVisible}
@@ -123,6 +138,7 @@ export default function Home() {
         {/* bottom navbar */}
         <BottomNavbar />
       </View>
+
     </HomeContext.Provider>
   )
 }

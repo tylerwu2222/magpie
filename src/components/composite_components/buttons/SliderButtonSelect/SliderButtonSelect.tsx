@@ -20,8 +20,9 @@ interface SliderButtonSelectProps {
   fade: boolean
 };
 
+
+
 // create a rounded scrollview/modal for selecting a icon
-// 
 const SliderButtonSelect = ({
   iconList = [],
   // numberIconsShown = 3,
@@ -37,6 +38,7 @@ const SliderButtonSelect = ({
   const trueIconHeight = iconHeight + iconPadding * 2;
   const listViewHeight = iconList.length * trueIconHeight;
   const paddedListViewHeight = iconList.length * trueIconHeight + iconPadding;
+  const sliderAnimateDuration = iconList.length * 100;
 
   const styles = StyleSheet.create({
     sliderButtonSelectView: {
@@ -140,7 +142,7 @@ const SliderButtonSelect = ({
         }}
         transition={{
           type: 'timing',
-          duration: 250,
+          duration: sliderAnimateDuration,
           // delay: sliderOpen ? 100 : 0, // Add delay when opening the slider
         }}
       >
@@ -156,7 +158,7 @@ const SliderButtonSelect = ({
             }}
             transition={{
               type: 'timing',
-              duration: 250,
+              duration: sliderAnimateDuration,
               // delay: sliderOpen ? 100 : 0, // Add delay when opening the slider
             }}
           >
