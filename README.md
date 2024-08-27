@@ -21,7 +21,7 @@ Quickly execute essential note functions (delete, duplicate, add to group, share
 ![drag_duplicate](https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExajUzaXBreGpneDFkbWEwZzQ2b212Y3h2ZG14NTdqaTZraHJubWQ1NyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/DusPcUthzowZPJGRBG/giphy.gif)
 
 ### Aging notes 👴
-Your notes can age (like Duolingo's app logo), they become greyer with time to let you subtly know which notes
+Your notes can age (like Duolingo's app logo), they become greyer with time to let you subtly know which notes might need some attention (or should be deleted).
 (This feature can also be toggled on a per-note basis)
 
 <img src="https://drive.google.com/uc?export=view&id=1syGy8o4uN4KEw74q-wfAT1JWfVJn3sRJ" alt="aging_notes" width="200"/>
