@@ -6,6 +6,10 @@ I've used a good amount of notetaking apps for the past few years (OneNote, Goog
 
 My goal is to complete a beta by the end of September 2024, and decide from there whether this is worth continuing.
 
+# Tech stack
+- React Native, Expo 📱
+- Express JS ⏩
+- PostgreSQL 🐘
 
 # Features
 ## Completed features
@@ -30,7 +34,7 @@ Change how notes are displayed. (More views to come!)
 ### Basic features
 Adding a note, searching notes, editing notes... not much to say here.
 
-![new note]([https://giphy.com/gifs/iLpGRmVUz70NPU4mei](https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHJiOW4ybHIwejFmNXFiYjgzczcwYzF2NGs3bXN0ZXNmdnliOHBlYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/iLpGRmVUz70NPU4mei/giphy.gif))
+![new note](https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHJiOW4ybHIwejFmNXFiYjgzczcwYzF2NGs3bXN0ZXNmdnliOHBlYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/iLpGRmVUz70NPU4mei/giphy.gif)
 
 ## In-progress features
 
