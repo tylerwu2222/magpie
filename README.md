@@ -19,7 +19,8 @@ Quickly execute essential note functions (delete, duplicate, add to group, share
 ### Aging notes 👴
 Your notes can age (like Duolingo's app logo), they become greyer with time to let you subtly know which notes
 (This feature can also be toggled on a per-note basis)
-![aging_notes](https://drive.google.com/file/d/1syGy8o4uN4KEw74q-wfAT1JWfVJn3sRJ/view?usp=sharing)
+
+![aging_notes](https://drive.google.com/uc?export=view&id=1syGy8o4uN4KEw74q-wfAT1JWfVJn3sRJ)
 
 ### Change note view
 Change how notes are displayed. (More views to come!)
