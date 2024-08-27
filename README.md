@@ -38,12 +38,15 @@ Adding a note, searching notes, editing notes... not much to say here.
 
 ## In-progress features
 
-### Recurring notes (aka a visual todo note)
+### Recurring notes (aka a more visual todo note)
 This idea is similar to Google Keep's daily reminder notes, but with a visual twist: the note will become "emptier" (as if it were filled with a liquid), throughout the day, based on a start and end time you establish. That way, you can get a rough sense of how that task completion is going.
 
 ### "Edit mode"
 Rather than navigating to a seperate tab to view folders, or have to arduously long press a note --> tap/drag all other notes --> tap a hamburger menu --> move to a folder...
 I thought, why not create a dedicated "edit mode" coral 🤠 those notes and establish connections and relationships more easily.
+
+### Basic markdown in notes
+think checkboxes, bullet points, underline, bolding, italicizing, etc..
 
 ## Potential ideas
 ### Network-style collections📚
