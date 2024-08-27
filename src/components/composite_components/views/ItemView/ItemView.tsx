@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, ViewStyle } from 'react-native'
 import React, { useState, useEffect, useContext } from 'react'
 import { HomeContext } from '@/app/home';
 
@@ -10,6 +10,8 @@ import { MasonryFlashList } from "@shopify/flash-list";
 import { cardDimensions, magpieDimensions, navbarDimensions } from '@/assets/constants/magpieDimensions';
 
 import { entryDataType } from '@/src/types/data';
+import { deleteNoteByID, duplicateNoteByID } from '@/src/api/notes';
+import { listStyle } from '@/src/components/items/cards/CardStyles';
 
 interface ItemViewProps {
   // ref: ,
@@ -21,44 +23,71 @@ const ItemView = ({
   viewType = 'grid'
 }: Partial<ItemViewProps>) => {
 
-
-  const styles = StyleSheet.create({
-    itemViewView: {
-      paddingVertical: 10,
-      paddingHorizontal: 5,
-      overflow: 'hidden'
-    },
-    deckContainerView: {
-      height: magpieDimensions.vh - navbarDimensions.bottomNavbarHeight - navbarDimensions.topNavbarHeight,
-      overflow: 'scroll'
-    },
-  })
-
   // need dynamic displayed notes, so use context
   const {
+    homeItemViewType,
     displayedNotes,
-    setDisplayedNotes,
-    setCornerButtonsVisible
+    setCornerButtonsVisible,
+    fetchSetNotes,
   } = useContext(HomeContext);
 
   // for handling card reordering
-  // const [draggingIndex, setDraggingIndex] = useState(-1);
-  // const [placeholderIndex, setPlaceholderIndex] = useState(-1);
+  const [staticCardAdditionalStyles, setStaticCardAdditionalStyles] = useState<any>();
+  const [numberFlashlistColumns, setNumberFlashlistColumns] = useState(2);
 
+  useEffect(() => {
+    console.log('homeItemViewType changed', homeItemViewType);
+    if (homeItemViewType == 'list') {
+      setNumberFlashlistColumns(1);
+      setStaticCardAdditionalStyles(listStyle.card);
+    }
+    if (homeItemViewType == 'grid'){
+      setNumberFlashlistColumns(2);
+      setStaticCardAdditionalStyles(null);
+    }
+    if (homeItemViewType == 'stack'){
+      setNumberFlashlistColumns(2);
+      setStaticCardAdditionalStyles(null);
+    }
+  }, [homeItemViewType]);
+
+  // corner handlers
   // when card is long pressed, 
   const handleDrag = () => {
     // display drag actions
     setCornerButtonsVisible(true);
-    // setIsScrollable(false)
   };
-
   const handleDragEnd = () => {
     // hide drag actions
     setCornerButtonsVisible(false);
     // reorder items based on final placeholder position
-
-
   };
+  const handleDragShare = async (id: number) => {
+    // shareNoteByID(id);
+  }
+  const handleDragDelete = async (id: number) => {
+    await deleteNoteByID(id);
+    await fetchSetNotes();
+  }
+  const handleDragDuplicate = async (id: number) => {
+    console.log('duplicating note');
+    await duplicateNoteByID(id);
+    await fetchSetNotes();
+  }
+  const createHomeCornerActions = (id: number) => ({
+    topLeftFn: () => {
+      handleDragShare(id);
+    },
+    topRightFn: () => {
+      handleDragDelete(id);
+    },
+    bottomLeftFn: () => {
+      // Define other action here
+    },
+    bottomRightFn: () => {
+      handleDragDuplicate(id);
+    },
+  });
 
 
   // render item
@@ -69,6 +98,9 @@ const ItemView = ({
       isInteractable={true}
       onLongPressFn={handleDrag}
       onPressOutFn={handleDragEnd}
+      isDraggable={true}
+      cornerActions={createHomeCornerActions(item.id)}
+      additionalStyle={staticCardAdditionalStyles}
     />
   );
 
@@ -79,7 +111,7 @@ const ItemView = ({
       <View style={styles.deckContainerView}>
         <MasonryFlashList
           data={displayedNotes}
-          numColumns={2}
+          numColumns={numberFlashlistColumns}
           estimatedItemSize={cardDimensions.height}
           renderItem={renderItem}
           style={styles.deckContainerView}
@@ -92,3 +124,16 @@ const ItemView = ({
 }
 
 export default ItemView
+
+
+const styles = StyleSheet.create({
+  itemViewView: {
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    overflow: 'hidden'
+  },
+  deckContainerView: {
+    height: magpieDimensions.vh - navbarDimensions.bottomNavbarHeight - navbarDimensions.topNavbarHeight,
+    overflow: 'scroll'
+  },
+})

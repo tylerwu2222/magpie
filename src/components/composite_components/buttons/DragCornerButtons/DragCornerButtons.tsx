@@ -1,14 +1,27 @@
 import { StyleSheet, Text } from 'react-native'
 import React, { ReactElement } from 'react';
 import { View, MotiView } from 'moti';
-import { magpieDimensions } from '@/assets/constants/magpieDimensions';
+import { magpieDimensions, cornerButtonDistance, defaultButtonSize } from '@/assets/constants/magpieDimensions';
 
 interface DragCornerButtonsProps {
-  buttons: Array<ReactElement>
+  buttons: Array<ReactElement>,
+  buttonSize: number,
+  buttonMargin: number
 }
 
+const cornerPositions = [
+  { top: -cornerButtonDistance, right: -cornerButtonDistance },  // Top right
+  { bottom: -cornerButtonDistance, right: -cornerButtonDistance },  // Bottom right
+  { bottom: -cornerButtonDistance, left: -cornerButtonDistance },  // Bottom left
+  { top: -cornerButtonDistance, left: -cornerButtonDistance },  // Top left
+];
+
 // displays up to 4 action buttons in each corner to drag to
-const DragCornerButtons = ({ buttons }: DragCornerButtonsProps) => {
+const DragCornerButtons = ({
+  buttons,
+  buttonSize = defaultButtonSize,
+  buttonMargin = 5
+}: Partial<DragCornerButtonsProps>) => {
 
   const styles = StyleSheet.create({
     dragCornerButtonsContainer: {
@@ -23,25 +36,20 @@ const DragCornerButtons = ({ buttons }: DragCornerButtonsProps) => {
     buttonContainer: {
       position: 'absolute',
       // backgroundColor: 'transparent',
-      margin: 16,  // Adjust the margin as needed
+      margin: buttonMargin,
     }
   })
-  const positions = [
-    { top: 0, right: 0 },  // Top right
-    { bottom: 0, right: 0 },  // Bottom right
-    { bottom: 0, left: 0 },  // Bottom left
-    { top: 0, left: 0 },  // Top left
-  ];
+
 
   return (
     <View style={styles.dragCornerButtonsContainer}>
-      {buttons.map((button, index) => (
+      {buttons && buttons.map((button, index) => (
         <MotiView
           key={index}
-          style={[styles.buttonContainer, positions[index]]}
+          style={[styles.buttonContainer, cornerPositions[index]]}
           from={{
-            translateX: index === 1 || index === 2 ? 50 : -50,  // Horizontal translation
-            translateY: index < 2 ? -50 : 50,  // Vertical translation
+            translateX: index < 2 ? buttonSize : -buttonSize,  // Horizontal translation
+            translateY: index === 0 || index === 4 ? -buttonSize : buttonSize,  // Vertical translation
             opacity: 0,
           }}
           animate={{

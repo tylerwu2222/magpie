@@ -1,25 +1,26 @@
 import { StyleSheet } from 'react-native';
-import React, { useState, useContext } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 
 // components
 import { Card } from 'react-native-paper'
 import ShareIconButton from '../../../buttons/common_icon_buttons/ShareIconButton';
-
 import AddIconButton from '../../../buttons/common_icon_buttons/AddIconButton';
-import FavoriteIconButton from '../../../buttons/common_icon_buttons/FavoriteIconButton';
+import AnimatedActivityIndicator from '@/src/components/icons/AnimatedActivityIndicator/AnimatedActivityIndicator';
+// import FavoriteIconButton from '../../../buttons/common_icon_buttons/FavoriteIconButton';
 
 // styles
 import { Colors } from '@/assets/constants/Colors';
-import { cardDimensions, magpieDimensions } from '@/assets/constants/magpieDimensions';
+import { cardDimensions, defaultButtonSize, magpieDimensions, smallerButtonSize } from '@/assets/constants/magpieDimensions';
 
 // types
 import { defaultEntryData, entryDataType } from '@/src/types/data';
 import AnimatedCardContent from '../AnimatedCardContent';
 import CloseIconButton from '@/src/components/buttons/common_icon_buttons/CloseIconButton';
 
-import { addNote, deleteNoteByID, updateNoteByID } from '@/src/api/notes';
+import { deleteNoteByID, updateNoteByID } from '@/src/api/notes';
 import DeleteIconButton from '@/src/components/buttons/common_icon_buttons/DeleteIconButton';
-import { HomeContext } from '@/app/home';
+import { useDebounceFunction } from '@/src/scripts/useDebounceFunction';
+// import { HomeContext } from '@/app/home';
 
 interface EditableCardProps {
   entryData: entryDataType | undefined,
@@ -48,7 +49,7 @@ const EditableCard = (
     mode = 'outlined',
     isFullscreen = true,
     isSharable = true,
-    isNewNote = false,
+    // isNewNote = false,
     cardColorDict = Colors.lightCard,
     cardPaddingHorizontal = 10,
     cardPaddingVertical = 10,
@@ -61,56 +62,73 @@ const EditableCard = (
   const styles = StyleSheet.create({
     card: {
       backgroundColor: cardColorDict.background,
-      borderColor: cardColorDict.border,
+      // backgroundColor: 'red',
+      // borderColor: cardColorDict.border,
       // minWidth: 260,
       width: isFullscreen ? magpieDimensions.vw : cardDimensions.width * 1.5,
       height: isFullscreen ? magpieDimensions.vh : cardDimensions.height * 1.5,
-      borderRadius: isFullscreen ? cardDimensions.borderRadius : 0
+      borderRadius: isFullscreen ? cardDimensions.borderRadius : 0,
     },
-    cardTitle: {
-      color: cardColorDict.text
-    },
-    cardContent: {
-      color: cardColorDict.text,
-      paddingHorizontal: cardPaddingHorizontal,
-      paddingVertical: cardPaddingVertical,
-      height: '100%'
-    },
-    cardLastContent: {
-      paddingVertical: 0
-    }
+    // cardTitle: {
+    //   color: cardColorDict.text
+    // },
+    // cardContent: {
+    //   color: cardColorDict.text,
+    //   paddingHorizontal: cardPaddingHorizontal,
+    //   paddingVertical: cardPaddingVertical,
+    //   height: '100%'
+    // },
+    // cardLastContent: {
+    //   paddingVertical: 0
+    // }
   })
 
   // split entryData into parts to allow for partial editing
   const [title, setTitle] = useState<string | undefined>(entryData?.title);
   const [subtitle, setSubtitle] = useState<string | undefined>(entryData?.subtitle);
   const [description, setDescription] = useState<string | undefined>(entryData?.description);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  // const debouncedTitle = useDebounce(title, 1000);
+  // const debouncedSubtitle = useDebounce(subtitle, 1000);
+  // const debouncedDescription = useDebounce(description, 1000);
 
   // note content change handlers
-  const handleChangeContent = (
+  const handleChangeContent = useCallback((
     columnName: string,
-    updatedContent: string
+    updatedContent: string,
+    // debouncedContent: string | undefined
   ) => {
-    // only update note if note new note
-    if (!isNewNote) {
-      if (entryData?.id) {
-        updateNoteByID(entryData.id, columnName, updatedContent);
-      }
+    // console.log('editing...')
+    if (entryData?.id) {
+      console.log('saving.')
+      updateNoteByID(entryData.id, columnName, updatedContent);
+      setIsSaving(false);
     }
-  };
+    // }
+  }, []);
+
+  const debouncedChangeContent = useDebounceFunction(handleChangeContent, 1000);
+
+  // const debouncedChangeContent = (...args: any[]) => {
+  //   return useDebounceFunction(handleChangeContent, 1000)
+  // }
+
+
   const handleChangeTitle = (updatedText: string) => {
     // update FE state
     setTitle(updatedText);
-    // update BE state
-    handleChangeContent('title', updatedText);
+    setIsSaving(true);
+    debouncedChangeContent('title', updatedText);
   };
   const handleChangeSubtitle = (updatedText: string) => {
     setSubtitle(updatedText);
-    handleChangeContent('subtitle', updatedText);
+    setIsSaving(true);
+    debouncedChangeContent('subtitle', updatedText);
   };
   const handleChangeDescription = (updatedText: string) => {
     setDescription(updatedText);
-    handleChangeContent('description', updatedText);
+    setIsSaving(true);
+    debouncedChangeContent('description', updatedText);
   };
 
   const handleDeleteNote = async () => {
@@ -126,7 +144,7 @@ const EditableCard = (
     // <FavoriteIconButton contentSize={20} />,
     <DeleteIconButton contentSize={20} onPressFn={handleDeleteNote} />,
     <AddIconButton contentSize={20} onPressFn={() => { console.log('pressed add btn') }} />,
-    <ShareIconButton contentSize={20} />
+    <ShareIconButton contentSize={20} onPressFn={() => { console.log('pressed share btn') }} />
   ];
 
   return (
@@ -138,10 +156,11 @@ const EditableCard = (
       onLongPress={onLongPressFn}
       style={styles.card}
     >
+      {isSaving && <AnimatedActivityIndicator />}
       <AnimatedCardContent
         topRightCardIcons={topRightCardIcons}
         bottomCardIcons={bottomCardIcons}
-        styles={styles}
+        // styles={styles}
         title={title}
         subtitle={subtitle}
         description={description}

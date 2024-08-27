@@ -1,26 +1,22 @@
 import { StyleSheet, View } from 'react-native';
 import React, { useState, useRef, useContext } from 'react';
-import BlurOverlayContext from '@/src/providers/OverlayProviders/BlurOverlayProvider';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { HomeContext } from '@/app/home';
+// import BlurOverlayContext from '@/src/providers/OverlayProviders/BlurOverlayProvider';
 
 // components
-import { Card } from 'react-native-paper'
-import TextInput from '../../../inputs/textInput/TextInput';
-import AddIconButton from '../../../buttons/common_icon_buttons/AddIconButton';
-import FavoriteIconButton from '../../../buttons/common_icon_buttons/FavoriteIconButton';
-import ShareIconButton from '../../../buttons/common_icon_buttons/ShareIconButton';
 import EditableCardModal from '@/src/components/modals/EditableCardModal/EditableCardModal';
+import DraggableCardModal from '@/src/components/modals/DraggableCardModal/DraggableCardModal';
+import StaticCardContent from '../StaticCardContent';
 
 // styles
 import { Colors } from '@/assets/constants/Colors';
-import { cardDimensions } from '@/assets/constants/magpieDimensions';
+import { magpieDimensions, cardDimensions, draggableCardShrink, largerButtonSize } from '@/assets/constants/magpieDimensions';
 
-// data
-// import dummyCollection from '@/assets/data/dummyData/dummyCollection.json';
+// types
 import { entryDataType } from '@/src/types/data';
-import StaticCardContent from '../StaticCardContent';
-import { HomeContext } from '@/app/home';
-import DraggableCardModal from '@/src/components/modals/DraggableCardModal/DraggableCardModal';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { MotiPressable } from 'moti/interactions';
+
 
 interface StaticCardProps {
   entryData: entryDataType | undefined,
@@ -31,6 +27,13 @@ interface StaticCardProps {
   isSharable: boolean,
   isInteractable: boolean,
   isDraggable: boolean,
+  hasCornerActions: boolean,
+  cornerActions: {
+    topLeftFn: () => void,
+    topRightFn: () => void,
+    bottomLeftFn: () => void,
+    bottomRightFn: () => void,
+  },
 
   cardColorDict: {
     'background': string,
@@ -42,9 +45,19 @@ interface StaticCardProps {
   onPressFn: () => void,
   onLongPressFn: () => void,
   onPressOutFn: () => void,
-  // additionalStyle?: React.CSSProperties
   additionalStyle: any
 }
+
+
+// check for each corner
+const cornerCoordinates = {
+  top: largerButtonSize,
+  bottom: magpieDimensions.vh - largerButtonSize,
+  left: largerButtonSize,
+  right: magpieDimensions.vw - largerButtonSize
+};
+const halfCardWidth = cardDimensions.width * draggableCardShrink / 2;
+const halfCardHeight = cardDimensions.height * draggableCardShrink / 2;
 
 // static card, opens editable card if interactable
 const StaticCard = (
@@ -57,6 +70,13 @@ const StaticCard = (
     isSharable = true,
     isInteractable = false,
     isDraggable = false,
+    hasCornerActions = true,
+    cornerActions = {
+      topLeftFn: () => { },
+      topRightFn: () => { },
+      bottomLeftFn: () => { },
+      bottomRightFn: () => { },
+    },
 
     cardColorDict = Colors.lightCard,
     cardPaddingHorizontal = 10,
@@ -71,7 +91,10 @@ const StaticCard = (
   const [editableCardModalVisible, setEditableCardModalVisible] = useState(false);
   const [draggableCardModalVisible, setDraggableCardModalVisible] = useState(false);
   // const staticCardRef = useRef<View | null>(null);
-  const { fetchSetNotes } = useContext(HomeContext);
+  const { fetchSetNotes,
+    setIsDraggableHoveringDelete,
+    isDraggableHoveringDelete
+  } = useContext(HomeContext);
   // const [cardPosition, setCardPosition] = useState({ x: 0, y: 0, width: 0, height: 0 });
   const [cardPosition, setCardPosition] = useState({ x: 0, y: 0 });
 
@@ -82,12 +105,11 @@ const StaticCard = (
   const styles = StyleSheet.create({
     card: {
       backgroundColor: draggableCardModalVisible ? Colors.lightCardDisabled.background : cardColorDict.background,
-      // borderColor: 'transparent',
+      borderWidth: 1,
       borderColor: draggableCardModalVisible ? Colors.lightCardDisabled.border : cardColorDict.border,
       borderRadius: cardDimensions.borderRadius,
       borderTopLeftRadius: 0,
       borderBottomRightRadius: 0,
-      // minWidth: 260,
       width: cardDimensions.width,
       maxHeight: cardDimensions.height,
       margin: 5,
@@ -106,6 +128,42 @@ const StaticCard = (
     }
   })
 
+  const changeCardCornerAction = (x: number, y: number) => {
+    if ((x + halfCardWidth) > cornerCoordinates.right && (y - halfCardHeight) < cornerCoordinates.top) {
+      // console.log('hovering delete!');
+      setIsDraggableHoveringDelete(true);
+    }
+    else {
+      setIsDraggableHoveringDelete(false);
+    }
+  }
+
+  const exitCardCornerAction = (x: number, y: number) => {
+    // console.log('end coords top left', x - halfCardWidth, y - halfCardHeight);
+    // console.log('coords', cornerCoordinates);
+
+    // top left
+    if ((x - halfCardWidth) < cornerCoordinates.left && (y - halfCardHeight) < cornerCoordinates.top) {
+      // console.log('top left activated')
+      cornerActions.topLeftFn();
+    }
+    // top right
+    else if ((x + halfCardWidth) > cornerCoordinates.right && (y - halfCardHeight) < cornerCoordinates.top) {
+      // console.log('top right activated')
+      cornerActions.topRightFn();
+    }
+    // bottom left
+    else if ((x - halfCardWidth) < cornerCoordinates.left && (y + halfCardHeight) > cornerCoordinates.bottom) {
+      // console.log('bottom left activated')
+      cornerActions.bottomLeftFn();
+    }
+    // bottom right
+    else if ((x + halfCardWidth) > cornerCoordinates.right && (y + halfCardHeight) > cornerCoordinates.bottom) {
+      // console.log('bottom right activated')
+      cornerActions.bottomRightFn();
+    }
+  };
+
 
   const longPress = Gesture.LongPress()
     .onBegin((e) => {
@@ -119,21 +177,28 @@ const StaticCard = (
       setCardPosition({ x: e.absoluteX, y: e.absoluteY });
     })
     .onChange((e) => {
+      // check for change card actions
+      changeCardCornerAction(e.absoluteX, e.absoluteY);
+      // update card position
       setCardPosition({ x: e.absoluteX, y: e.absoluteY });
     })
-    .onEnd(() => {
+    .onEnd((e) => {
+      // check if card position is at corner
+      if (hasCornerActions && draggableCardModalVisible) {
+        exitCardCornerAction(e.absoluteX, e.absoluteY);
+      }
+      // reset card position
       setCardPosition({ x: 0, y: 0 });
     })
     ;
 
   const composed = Gesture.Simultaneous(longPress, pan)
 
-  // make ECM visible on click (if interactable)
+  // handle gestures based on draggable prop
   return (
     <>
       <GestureDetector
-        // gesture={longPress}
-        gesture={composed}
+        gesture={isDraggable ? composed : longPress}
       >
         <>
           <EditableCardModal
@@ -155,9 +220,10 @@ const StaticCard = (
             }}
             // startingPosition={getCurrentPosition()}
             cardPosition={cardPosition}
+            isHoveringDelete={isDraggableHoveringDelete}
           />
-          <Card
-            mode={mode}
+          <MotiPressable
+            // mode={mode}
             onPress={() => {
               if (isInteractable) {
                 setEditableCardModalVisible(true);
@@ -166,14 +232,14 @@ const StaticCard = (
             }}
             onLongPress={() => {
               if (isInteractable) {
-                setDraggableCardModalVisible(true);
                 onLongPressFn();
+                setDraggableCardModalVisible(true);
               }
             }}
             onPressOut={() => {
               if (isInteractable) {
-                setDraggableCardModalVisible(false);
                 onPressOutFn();
+                setDraggableCardModalVisible(false);
               }
             }}
             style={[styles.card, additionalStyle]}
@@ -185,7 +251,7 @@ const StaticCard = (
               hasImage={hasImage}
               styles={styles}
             />
-          </Card >
+          </MotiPressable >
         </>
       </GestureDetector>
     </>

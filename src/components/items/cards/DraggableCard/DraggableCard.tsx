@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 // import BlurOverlayContext from '@/src/providers/OverlayProviders/BlurOverlayProvider';
 
 // components
@@ -11,7 +11,7 @@ import { PanGestureHandler, PanGestureHandlerGestureEvent, GestureDetector, Gest
 
 // styles
 import { Colors } from '@/assets/constants/Colors';
-import { cardDimensions } from '@/assets/constants/magpieDimensions';
+import { cardDimensions, magpieDimensions, draggableCardShrink } from '@/assets/constants/magpieDimensions';
 
 // data
 // import dummyCollection from '@/assets/data/dummyData/dummyCollection.json';
@@ -39,8 +39,8 @@ interface DraggableCardProps {
   onLongPressFn: () => void,
   onPressOutFn: () => void,
   longPressDuration: number,
-  // additionalStyle?: React.CSSProperties
-  additionalStyle: any
+  isHoveringDelete: boolean,
+  // additionalStyle: any
 }
 
 // static card, opens editable card if interactable
@@ -61,7 +61,8 @@ const DraggableCard = (
     onLongPressFn = () => { },
     onPressOutFn = () => { },
     longPressDuration = 500,
-    additionalStyle
+    isHoveringDelete = false,
+    // additionalStyle
   }: Partial<DraggableCardProps>
 ) => {
 
@@ -69,18 +70,13 @@ const DraggableCard = (
 
   // const {
   //   showBlurOverlay
-  // } = useContext(BlurOverlayContext);
-
-  // const cardIcons = [
-  //   // <FavoriteIconButton contentSize={20} />,
-  //   <AddIconButton contentSize={20} />,
-  //   <ShareIconButton contentSize={20} />];
+  // } = useContext(BlurOverlayContext);  
 
   const styles = StyleSheet.create({
     card: {
       position: 'absolute',
       top: cardPosition.y - cardDimensions.height * 2,
-      left: cardPosition.x - cardDimensions.width/2,
+      left: cardPosition.x - cardDimensions.width / 2,
       backgroundColor: cardColorDict.background,
       borderWidth: 1,
       // borderColor: cardColorDict.border,
@@ -91,7 +87,8 @@ const DraggableCard = (
       width: cardDimensions.width,
       maxHeight: cardDimensions.height,
       margin: 5,
-      overflow: 'hidden'
+      overflow: 'hidden',
+      pointerEvents: 'none'
     },
     cardTitle: {
       color: cardColorDict.text
@@ -106,43 +103,64 @@ const DraggableCard = (
     }
   })
 
-  const { fetchSetNotes } = useContext(HomeContext);
+  const { isDraggableHoveringDelete } = useContext(HomeContext);
   const [isLongPressed, setIsLongPressed] = useState<boolean>(true);
+
+  const handleBorderColor = () => {
+    if (isLongPressed) {
+      if (isHoveringDelete) {
+        return Colors.lightCardDelete.border;
+      }
+      else {
+        return cardColorDict.border;
+      }
+    }
+    return 'transparent';
+  };
+
+  const handleBackgroundColor = () => {
+    if (isLongPressed) {
+      if (isHoveringDelete) {
+        return Colors.lightCardDelete.background;
+      }
+    }
+    return cardColorDict.background;;
+  }
 
   return (<>
     <MotiPressable
       onLongPress={() => {
-        // handleLongPress();
+        setIsLongPressed(true);
         onLongPressFn();
       }}
       onPressOut={() => {
-        // handlePressOut();
+        setIsLongPressed(false);
         onPressOutFn();
       }}
       from={{
-        // scale: 1,
+        scale: 1,
         borderColor: 'transparent',
         opacity: 1,
         // backgroundColor: 'lightblue'
         // position: 'relative'
       }}
       animate={{
-        // scale: isLongPressed ? 0.8 : 1,
-        borderColor: isLongPressed ? cardColorDict.border : 'transparent',
-        opacity: isLongPressed ? 0.98 : 1,
-        // backgroundColor: isLongPressed ? '' : 'lightblue',
+        scale: isLongPressed ? draggableCardShrink : 1,
+        borderColor: handleBorderColor(),
+        opacity: isLongPressed ? 0.8 : 1,
+        backgroundColor: handleBackgroundColor(),
         // position: isLongPressed ? 'absolute': 'relative'
       }}
       transition={{
         type: 'spring'
       }}
-      style={[styles.card, additionalStyle]}
+      style={styles.card}
     >
       <AnimatedCardContent
         entryData={entryData}
         // bottomCardIcons={cardIcons}
         showPlaceholders={false}
-        styles={styles}
+      // styles={styles}
       />
     </MotiPressable>
   </>

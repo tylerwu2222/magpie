@@ -10,11 +10,8 @@ import { defaultEntryData, entryDataType, setEntryDataType, newEntryDataType, se
 
 import { fetchNotes, addNote } from '@/src/api/notes';
 import DragCornerButtons from '@/src/components/composite_components/buttons/DragCornerButtons/DragCornerButtons';
-import DeleteIconButton from '@/src/components/buttons/common_icon_buttons/DeleteIconButton';
-import AddCollectionIconButton from '@/src/components/buttons/common_icon_buttons/AddCollectionIconButton';
-import PencilIconButton from '@/src/components/buttons/common_icon_buttons/PencilIconButton';
-import ShareIconButton from '@/src/components/buttons/common_icon_buttons/ShareIconButton';
-import { Colors } from '@/assets/constants/Colors';
+import { HomeCornerButtons } from '@/src/components/modals/HomeCornerButtons/HomeCornerButtons';
+import { largerButtonSize } from '@/assets/constants/magpieDimensions';
 
 
 
@@ -25,14 +22,12 @@ interface HomeContextProps {
   setDisplayedNotes: setEntryDataType,
   newNoteVisible: boolean,
   setNewNoteVisible: Dispatch<SetStateAction<boolean>>,
-  // newNoteEmpty: boolean,
-  // setNewNoteEmpty: Dispatch<SetStateAction<boolean>>,
-  // newNoteContent: newEntryDataType,
-  // setNewNoteContent: Dispatch<SetStateAction<newEntryDataType>>
   fetchSetNotes: () => void,
   homeSearchQuery: string,
   setHomeSearchQuery: Dispatch<SetStateAction<string>>,
-  setCornerButtonsVisible: Dispatch<SetStateAction<boolean>>
+  setCornerButtonsVisible: Dispatch<SetStateAction<boolean>>,
+  isDraggableHoveringDelete: boolean,
+  setIsDraggableHoveringDelete: Dispatch<SetStateAction<boolean>>,
 }
 
 export const HomeContext = createContext<HomeContextProps>({} as HomeContextProps);
@@ -49,6 +44,7 @@ export default function Home() {
   // const itemViewRef = useRef<View>(null)
 
   // state variables that are available to all home children
+  // view
   const [homeItemViewType, setHomeItemViewType] = useState<string>('grid');
 
   // notes
@@ -60,12 +56,8 @@ export default function Home() {
   const [homeSearchQuery, setHomeSearchQuery] = useState<string>('');
   const [cornerButtonsVisible, setCornerButtonsVisible] = useState(false);
 
-  // fill backgrounds
-  const cornerButtons = [
-    <DeleteIconButton buttonColorDict={Colors.deleteButtonFilled} />,
-    <AddCollectionIconButton buttonColorDict={Colors.favoriteButtonFilled} />,
-    <PencilIconButton buttonColorDict={Colors.favoriteButtonFilled} />,
-    <ShareIconButton buttonColorDict={Colors.favoriteButtonFilled} />];
+  // drag
+  const [isDraggableHoveringDelete, setIsDraggableHoveringDelete] = useState(false);
 
   // UPDATE
   const fetchSetNotes = async () => {
@@ -108,7 +100,6 @@ export default function Home() {
 
   };
 
-
   return (
     <HomeContext.Provider
       value={{
@@ -121,9 +112,11 @@ export default function Home() {
         setNewNoteVisible,
         homeSearchQuery,
         setHomeSearchQuery,
-        setCornerButtonsVisible
+        setCornerButtonsVisible,
+        isDraggableHoveringDelete,
+        setIsDraggableHoveringDelete
       }}>
-      {cornerButtonsVisible && <DragCornerButtons buttons={cornerButtons} />}
+      {cornerButtonsVisible && <DragCornerButtons buttons={HomeCornerButtons} buttonSize={largerButtonSize} />}
       <View style={styles.homeView}>
         <NewEditableCardModal
           visible={newNoteVisible}

@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, View, ScrollView } from 'react-native';
 import { MotiView } from 'moti';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 
-import React, { ReactElement, useState, useRef, useEffect } from 'react'
+import React, { ReactElement, useState } from 'react'
 import { Colors } from '@/assets/constants/Colors';
 
 interface SliderButtonSelectProps {
@@ -17,7 +17,9 @@ interface SliderButtonSelectProps {
   sliderBackgroundColor: string,
   iconBackgroundColor: string,
   openDirection: 'up' | 'down'
-  fade: boolean
+  fade: boolean,
+
+  iconChangeFn: (arg0: any) => void
 };
 
 
@@ -32,7 +34,8 @@ const SliderButtonSelect = ({
   sliderBackgroundColor = 'white',
   iconBackgroundColor = Colors.accentBlueButton.ripple,
   openDirection = 'up',
-  fade = true
+  fade = true,
+  iconChangeFn = (selectedIcon) => { }
 }: Partial<SliderButtonSelectProps>) => {
 
   const trueIconHeight = iconHeight + iconPadding * 2;
@@ -88,6 +91,7 @@ const SliderButtonSelect = ({
     return [...indexToEnd, ...startToIndex];
   }
 
+  // slider handlers
   const handleSliderOpen = () => {
     setSliderOpen(true);
   }
@@ -115,6 +119,7 @@ const SliderButtonSelect = ({
       // set the selected icon once user releases pan
       if (highlightedIndex !== null) {
         setSelectedIcon(dynamicIconList[highlightedIndex]);
+        iconChangeFn(dynamicIconList[highlightedIndex]);
         // reorder icon list, so selected icon is first
         if (openDirection == 'up') {
           setDynamicIconList(moveToEnd(dynamicIconList, highlightedIndex));

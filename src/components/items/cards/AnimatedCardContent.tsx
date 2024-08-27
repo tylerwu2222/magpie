@@ -25,7 +25,7 @@ interface AnimatedCardContentProps {
     showPlaceholders: boolean,
     isEditable: boolean,
     hasImage: boolean,
-    styles: any
+    // styles: any
 }
 
 export default function AnimatedCardContent({
@@ -41,9 +41,13 @@ export default function AnimatedCardContent({
     showPlaceholders = true,
     isEditable = false,
     hasImage = false,
-    styles
+    // styles
 }: Partial<AnimatedCardContentProps>) {
-    const additionalStyles = StyleSheet.create({
+    const styles = StyleSheet.create({
+        animatableCardContentView: {
+            borderWidth: 0,
+            paddingTop: 20
+        },
         topRightIconsView: {
             position: 'absolute',
             top: 0,
@@ -60,10 +64,14 @@ export default function AnimatedCardContent({
         }
     })
 
+    
+
     return (
         <>
-            <MotiView>
-                {topRightCardIcons ? <View style={additionalStyles.topRightIconsView}>
+            <MotiView
+                style={styles.animatableCardContentView}
+            >
+                {topRightCardIcons ? <View style={styles.topRightIconsView}>
 
                     {
                         topRightCardIcons.map((icon, index) => {
@@ -102,7 +110,7 @@ export default function AnimatedCardContent({
                     onChangeTextFn={descriptionChangeFn}
                 />
                 {bottomCardIcons ?
-                    <View style={additionalStyles.bottomIconsView}>
+                    <View style={styles.bottomIconsView}>
                         {bottomCardIcons.map((icon, index) => {
                             return <View key={index}>{icon}</View>
                         })}

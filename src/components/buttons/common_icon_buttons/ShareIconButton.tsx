@@ -4,10 +4,12 @@ import CustomIconButton from '../IconButton/IconButton'
 import ExpoIcon from '../../icons/ExpoIcon'
 import { Colors } from '@/assets/constants/Colors'
 import { basicButtonType } from '@/src/types/components'
+import { defaultButtonSize } from '@/assets/constants/magpieDimensions'
 
 export default function ShareIconButton({
     isDisabled,
-    contentSize = 40,
+    contentSize = defaultButtonSize,
+    borderRadius,
     buttonColorDict = Colors.accentBlueButton
 }: basicButtonType) {
     return (
@@ -16,6 +18,7 @@ export default function ShareIconButton({
             iconName={'share'}
             isDisabled={isDisabled}
             iconSize={contentSize}
+            borderRadius={borderRadius}
             buttonColorDict={buttonColorDict}
         />
     )

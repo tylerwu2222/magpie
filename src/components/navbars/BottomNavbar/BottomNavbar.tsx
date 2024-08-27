@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React, { useContext } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import { HomeContext } from '@/app/home';
 
 // bottom navbar icons
@@ -50,27 +50,48 @@ const BottomNavbar = (
     }
   })
 
-  // const navbarIcons = ['view', 'edit', 'new_collection', 'new_collection']
-
-  const {setNewNoteVisible} = useContext(HomeContext);
+  const {
+    setHomeItemViewType,
+    setNewNoteVisible
+  } = useContext(HomeContext);
 
   // display new note modal
   const displayNewNote = () => {
     setNewNoteVisible(true)
   };
 
+  const displayNewCollection = () => {
+    console.log('display new collection');
+
+  };
+
+  // enter edit mode
+  const enterEditMode = () => {
+    console.log('enter edit mode');
+
+  };
+
+  const handleViewChange = (selectedIcon: any) => {
+    if (selectedIcon.type === GridIcon)  setHomeItemViewType('grid');
+    if (selectedIcon.type === ListIcon) setHomeItemViewType('list');
+    if (selectedIcon.type === CardsIcon) setHomeItemViewType('stack');
+  };
+
+
   return (
     <>
       <View style={styles.bottomNavbarView}>
         <View style={styles.leftSideView}>
           <SliderButtonSelect
-            iconList={[<GraphTreeIcon />, <GridIcon />, <ListIcon />, <CardsIcon />]}
+            // iconList={[<GraphTreeIcon />, <GridIcon />, <ListIcon />, <CardsIcon />]}
+            iconList={[ <ListIcon />, <CardsIcon />, <GridIcon />]}
             sliderBackgroundColor={Colors.lightTheme.lightBackground}
+            iconChangeFn={handleViewChange}
           />
         </View>
         <View style={styles.rightSideView}>
-          <PencilIconButton contentSize={30} />
-          <AddCollectionIconButton contentSize={30} />
+          <PencilIconButton contentSize={30} onPressFn={enterEditMode} />
+          <AddCollectionIconButton contentSize={30} onPressFn={displayNewCollection} />
           <AddIconButton contentSize={50} onPressFn={displayNewNote} />
         </View>
       </View>

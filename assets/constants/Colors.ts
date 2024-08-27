@@ -50,32 +50,6 @@ const magpie_logo_white = '#EFFDFE';
 const magpie_logo_black = '#040710';
 const magpie_logo_blue = '#106C9D';
 
-// theme
-const lightTheme = {
-  dark: false,
-  colors: {
-    primary: magpie_logo_blue,
-    background: magpie_grey_lightest,
-    card: magpie_logo_white,
-    text: magpie_logo_black,
-    border: magpie_grey_dark,
-    notification: magpie_blue_medium_dark,
-  }
-}
-
-const darkTheme = {
-  dark: false,
-  colors: {
-    primary: magpie_logo_blue,
-    background: magpie_grey_dark,
-    card: magpie_grey_medium_dark,
-    text: magpie_logo_white,
-    border: magpie_grey_light,
-    notification: magpie_blue_light_medium,
-  }
-}
-
-
 // maps colors to functionality
 export const Colors = {
   // screen themes
@@ -114,6 +88,11 @@ export const Colors = {
   lightCard: {
     background: magpie_logo_white,
     border: magpie_grey_darker,
+    text: magpie_grey_dark
+  },
+  lightCardDelete: {
+    background: magpie_red_light,
+    border: magpie_red,
     text: magpie_grey_dark
   },
   lightCardDisabled: {
@@ -184,6 +163,10 @@ export const Colors = {
     ripple: magpie_red_medium,
     toggle: magpie_red_light,
     text: magpie_white
+  },
+  indicatorIcon: {
+    icon: magpie_blue_medium_dark,
+    background: magpie_blue_light
   },
 
   redText: category_colors.red,

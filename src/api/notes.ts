@@ -153,3 +153,46 @@ export const deleteNoteByID = async (
     console.error('Error:', error);
   }
 };
+
+
+// function for duplicating note by ID
+export const duplicateNoteByID = async (
+  noteId: number | undefined
+) => {
+
+  const originalNote = await getNoteByID(noteId);
+
+  // isolate note content, remake id and update at
+  const { id, updated_at, created_at, ...noteContent } = originalNote;
+
+  // Get the current time to set as the creation time for the duplicated note
+  const creationTime = new Date();
+
+  // Create the duplicated note object
+  const duplicatedNote = {
+    ...noteContent,
+    created_at: creationTime,
+    updated_at: creationTime,
+  };
+
+  try {
+    const response = await fetch(`http://localhost:5000/notes`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(duplicatedNote),
+    });
+
+    // Handle the response
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+      // console.log('Note duplicated:', data);
+    } else {
+      console.error('Failed to duplicate note with ID', noteId);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}

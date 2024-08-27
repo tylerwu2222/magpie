@@ -3,21 +3,20 @@ import React from 'react'
 import CustomIconButton from '../IconButton/IconButton'
 import { Colors } from '@/assets/constants/Colors'
 import { basicButtonType } from '@/src/types/components'
-import { defaultButtonSize } from '@/assets/constants/magpieDimensions'
 
-export default function PencilIconButton({
+export default function CopyIconButton({
     isDisabled,
-    contentSize = defaultButtonSize,
-    borderRadius,
-    buttonColorDict = Colors.accentBlueButton
+    contentSize = 40,
+    buttonColorDict = Colors.accentBlueButton,
+    onPressFn = () => { }
 }: basicButtonType) {
     return (
         <CustomIconButton
-            iconName='lead-pencil'
+            iconName='content-copy'
             isDisabled={isDisabled}
             iconSize={contentSize}
-            borderRadius={borderRadius}
             buttonColorDict={buttonColorDict}
+            onPressFn={onPressFn}
         />
     )
 }

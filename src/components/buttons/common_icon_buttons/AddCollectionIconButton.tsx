@@ -3,10 +3,12 @@ import React from 'react'
 import CustomIconButton from '../IconButton/IconButton'
 import { Colors } from '@/assets/constants/Colors'
 import { basicButtonType } from '@/src/types/components'
+import { defaultButtonSize } from '@/assets/constants/magpieDimensions'
 
 export default function AddCollectionIconButton({
     isDisabled,
-    contentSize = 40,
+    contentSize = defaultButtonSize,
+    borderRadius,
     buttonColorDict = Colors.accentBlueButton
 }: basicButtonType) {
     return (
@@ -14,6 +16,7 @@ export default function AddCollectionIconButton({
             iconName='book-plus'
             isDisabled={isDisabled}
             iconSize={contentSize}
+            borderRadius={borderRadius}
             buttonColorDict={buttonColorDict}
         />
     )
