@@ -2,7 +2,7 @@
 Yes, it's another notetaking app.
 
 # Motivation
-I've used a good amount of notetaking apps for the past few years (OneNote, Google Keep, Notion, Obsidian, default notes app...), and each had feature I enjoyed, but each lacked some functionality I wanted. I also wanted to get better at full stack, so I thought: 🐦🐦🪨
+I've used a good amount of notetaking apps for the past few years (OneNote, Google Keep, Notion, Obsidian, default notes app...), and each had features I enjoyed, but each lacked some functionality I wanted. I also wanted to get better at full stack, so I thought: 🐦🐦🪨
 
 My goal is to complete a beta by the end of September 2024, and decide from there whether this is worth continuing.
 
@@ -12,11 +12,20 @@ My goal is to complete a beta by the end of September 2024, and decide from ther
 
 ### Drag and drop gestures 🐉🫳
 Quickly execute essential note functions (delete, duplicate, add to group, share) in a *single* gesture, as opposed to multiple unnecessary taps.
+![drag_delete](https://giphy.com/gifs/6BeQcXztO2JMox5M3f)
+![drag_duplicate](https://giphy.com/gifs/EPNHCKkWxESXgqAdS8)
 
 ### Aging notes 👴
 Your notes can age (like Duolingo's app logo), they become greyer with time to let you subtly know which notes
 (This feature can also be toggled on a per-note basis)
 
+### Change note view
+Change how notes are displayed. (More views to come!)
+![change_view](https://giphy.com/gifs/JMPhjXWZQXp6dJIFAo)
+
+### Basic features
+Adding a note, searching notes, editing notes... not much to say here.
+![new note](https://giphy.com/gifs/iLpGRmVUz70NPU4mei)
 
 ## In-progress features
 
