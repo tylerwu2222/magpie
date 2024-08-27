@@ -3,13 +3,7 @@ Yes, it's another notetaking app.
 
 # Motivation
 I've used a good amount of notetaking apps for the past few years (OneNote, Google Keep, Notion, Obsidian, default notes app...), and each had features I enjoyed, but each lacked some functionality I wanted. I also wanted to get better at full stack, so I thought: 🐦🐦🪨
-
 My goal is to complete a ⭐beta⭐ by the end of **September 2024**, and decide from there whether this is worth continuing.
-
-# Tech stack
-- React Native, Expo 📱
-- Express JS ⏩
-- PostgreSQL 🐘
 
 # Features (a perpetual WIP)
 ## Completed features
@@ -51,6 +45,11 @@ think checkboxes, bullet points, underline, bolding, italicizing, etc..
 ## Potential ideas
 ### Network-style collections📚
 Similar to Obsidian's network visualization, but created manually by literally connecting nodes in edit mode, rather than hyperlinking. This one I'm 50/50 on. Sometimes a note is complex. It doesn't just belong in one category. But also this might add too much complication... still up for debate.
+
+# Tech stack
+- React Native, Expo 📱
+- Express JS ⏩
+- PostgreSQL 🐘
 
 # Contact
 If you'd like to pitch me some ideas or something, feel free to email me at [tylerwu2222@gmail.com](mailto:tylerwu2222@gmail.com?subject=[GitHub]%20Source%20Magpie)
