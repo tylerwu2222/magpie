@@ -12,8 +12,8 @@ My goal is to complete a beta by the end of September 2024, and decide from ther
 
 ### Drag and drop gestures 🐉🫳
 Quickly execute essential note functions (delete, duplicate, add to group, share) in a *single* gesture, as opposed to multiple unnecessary taps.
-![drag_delete](https://giphy.com/gifs/6BeQcXztO2JMox5M3f)
-![drag_duplicate](https://giphy.com/gifs/EPNHCKkWxESXgqAdS8)
+![drag_delete](https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3VydWx0bzR3ZjZ3djF3dDZsM3cyZDI4a3hwOXpxZ3EybGJnNWtmdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Gk6Gegz2zr2Nk2cLfp/giphy.gif)
+![drag_duplicate](https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExajUzaXBreGpneDFkbWEwZzQ2b212Y3h2ZG14NTdqaTZraHJubWQ1NyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/DusPcUthzowZPJGRBG/giphy.gif)
 
 ### Aging notes 👴
 Your notes can age (like Duolingo's app logo), they become greyer with time to let you subtly know which notes
@@ -21,11 +21,11 @@ Your notes can age (like Duolingo's app logo), they become greyer with time to l
 
 ### Change note view
 Change how notes are displayed. (More views to come!)
-![change_view](https://giphy.com/gifs/JMPhjXWZQXp6dJIFAo)
+![change_view](https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExN2VmanJ3ejRucWJvb2dueGxzdHZ4bGd1dDN3eG8ydWhubGNoMnppbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/47o1CWpxUl5Wo1rg9t/giphy.gif)
 
 ### Basic features
 Adding a note, searching notes, editing notes... not much to say here.
-![new note](https://giphy.com/gifs/iLpGRmVUz70NPU4mei)
+![new note]([https://giphy.com/gifs/iLpGRmVUz70NPU4mei](https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHJiOW4ybHIwejFmNXFiYjgzczcwYzF2NGs3bXN0ZXNmdnliOHBlYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/iLpGRmVUz70NPU4mei/giphy.gif))
 
 ## In-progress features
 
