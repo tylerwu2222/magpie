@@ -1,8 +1,8 @@
-import { StyleSheet, View } from 'react-native';
-import React, { useState, useRef, useContext } from 'react';
+import { StyleSheet, } from 'react-native';
+import React, { useState, useContext } from 'react';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { runOnJS } from 'react-native-reanimated';
 import { HomeContext } from '@/app/home';
-// import BlurOverlayContext from '@/src/providers/OverlayProviders/BlurOverlayProvider';
 
 // components
 import EditableCardModal from '@/src/components/modals/EditableCardModal/EditableCardModal';
@@ -15,7 +15,8 @@ import { magpieDimensions, cardDimensions, draggableCardShrink, largerButtonSize
 
 // types
 import { entryDataType } from '@/src/types/data';
-import { MotiPressable } from 'moti/interactions';
+import { timeToHex } from '@/src/scripts/data/colorFunctions';
+import { MotiView } from 'moti';
 
 
 interface StaticCardProps {
@@ -88,23 +89,34 @@ const StaticCard = (
   }: Partial<StaticCardProps>
 ) => {
 
+  // modals
   const [editableCardModalVisible, setEditableCardModalVisible] = useState(false);
   const [draggableCardModalVisible, setDraggableCardModalVisible] = useState(false);
-  // const staticCardRef = useRef<View | null>(null);
-  const { fetchSetNotes,
+
+  const {
+    fetchSetNotes,
     setIsDraggableHoveringDelete,
     isDraggableHoveringDelete
   } = useContext(HomeContext);
-  // const [cardPosition, setCardPosition] = useState({ x: 0, y: 0, width: 0, height: 0 });
+
   const [cardPosition, setCardPosition] = useState({ x: 0, y: 0 });
 
-  // const {
-  //   showBlurOverlay
-  // } = useContext(BlurOverlayContext);
+  // console.log('SC entry data', entryData);
+  const getTimedColor = (color: string) => {
+    if (entryData?.updated_at) {
+      return timeToHex(
+        entryData?.updated_at,
+        color,
+        7
+      )
+    }
+    return color;
+
+  };
 
   const styles = StyleSheet.create({
     card: {
-      backgroundColor: draggableCardModalVisible ? Colors.lightCardDisabled.background : cardColorDict.background,
+      backgroundColor: draggableCardModalVisible ? Colors.lightCardDisabled.background : getTimedColor(cardColorDict.background),
       borderWidth: 1,
       borderColor: draggableCardModalVisible ? Colors.lightCardDisabled.border : cardColorDict.border,
       borderRadius: cardDimensions.borderRadius,
@@ -113,10 +125,22 @@ const StaticCard = (
       width: cardDimensions.width,
       maxHeight: cardDimensions.height,
       margin: 5,
-      overflow: 'hidden'
+      overflow: 'hidden',
+      // pointerEvents: 'none'
     },
     cardTitle: {
-      color: cardColorDict.text
+      color: cardColorDict.text,
+      fontSize: cardDimensions.titleFontSize
+
+    },
+    cardSubtitle: {
+      color: cardColorDict.text,
+      fontSize: cardDimensions.subtitleFontSize
+
+    },
+    cardDescription: {
+      color: cardColorDict.text,
+      fontSize: cardDimensions.textFontSize
     },
     cardContent: {
       color: cardColorDict.text,
@@ -164,41 +188,45 @@ const StaticCard = (
     }
   };
 
-
-  const longPress = Gesture.LongPress()
-    .onBegin((e) => {
-      // console.log('static card long pressed');
-      setCardPosition({ x: e.absoluteX, y: e.absoluteY });
+  const tap = Gesture.Tap()
+    .onStart(() => {
+      if (isInteractable) {
+        // console.log('setting ECM visible')
+        runOnJS(setEditableCardModalVisible)(true);
+        runOnJS(onPressFn);
+      }
     });
 
-  const pan = Gesture.Pan()
-    .onBegin((e) => {
-      // console.log('static card panned');
-      setCardPosition({ x: e.absoluteX, y: e.absoluteY });
+  const panDelay = 100;
+  const pan = Gesture.Pan().activateAfterLongPress(panDelay)
+    .onStart((e) => {
+      runOnJS(setDraggableCardModalVisible)(true); // set draggable card visible
+      runOnJS(onLongPressFn)(); // show corner actions
     })
     .onChange((e) => {
-      // check for change card actions
-      changeCardCornerAction(e.absoluteX, e.absoluteY);
+      runOnJS(changeCardCornerAction)(e.absoluteX, e.absoluteY);
       // update card position
-      setCardPosition({ x: e.absoluteX, y: e.absoluteY });
+      runOnJS(setCardPosition)({ x: e.absoluteX, y: e.absoluteY });
     })
     .onEnd((e) => {
+      // console.log('SC pan end');
       // check if card position is at corner
       if (hasCornerActions && draggableCardModalVisible) {
-        exitCardCornerAction(e.absoluteX, e.absoluteY);
+        runOnJS(exitCardCornerAction)(e.absoluteX, e.absoluteY);
       }
-      // reset card position
-      setCardPosition({ x: 0, y: 0 });
-    })
-    ;
+      // reset modal and card position
+      runOnJS(onPressOutFn)(); // hide corner actions
+      runOnJS(setDraggableCardModalVisible)(false);
+      // runOnJS(setCardPosition)({ x: 0, y: 0 });
+    });
 
-  const composed = Gesture.Simultaneous(longPress, pan)
+  const composed = Gesture.Race(pan, tap);
 
   // handle gestures based on draggable prop
   return (
     <>
       <GestureDetector
-        gesture={isDraggable ? composed : longPress}
+        gesture={composed}
       >
         <>
           <EditableCardModal
@@ -222,28 +250,8 @@ const StaticCard = (
             cardPosition={cardPosition}
             isHoveringDelete={isDraggableHoveringDelete}
           />
-          <MotiPressable
-            // mode={mode}
-            onPress={() => {
-              if (isInteractable) {
-                setEditableCardModalVisible(true);
-                onPressFn();
-              }
-            }}
-            onLongPress={() => {
-              if (isInteractable) {
-                onLongPressFn();
-                setDraggableCardModalVisible(true);
-              }
-            }}
-            onPressOut={() => {
-              if (isInteractable) {
-                onPressOutFn();
-                setDraggableCardModalVisible(false);
-              }
-            }}
-            style={[styles.card, additionalStyle]}
-          >
+          {/* static card content */}
+          <MotiView style={[styles.card, additionalStyle]}>
             <StaticCardContent
               entryData={entryData}
               // bottomCardIcons={cardIcons}
@@ -251,7 +259,7 @@ const StaticCard = (
               hasImage={hasImage}
               styles={styles}
             />
-          </MotiPressable >
+          </MotiView>
         </>
       </GestureDetector>
     </>

@@ -36,7 +36,6 @@ const DraggableCardModal = ({
     // console.log('DCM starting pos', startingPosition);
     return (
         <>
-            {/* <BlurOverlayProvider> */}
             <Portal>
                 <Modal
                     visible={visible}
@@ -57,7 +56,6 @@ const DraggableCardModal = ({
                     />
                 </Modal>
             </Portal>
-            {/* </BlurOverlayProvider> */}
         </>
     )
 }

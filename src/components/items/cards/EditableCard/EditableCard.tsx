@@ -1,10 +1,11 @@
-import { StyleSheet } from 'react-native';
-import React, { useState, useCallback, useMemo } from 'react';
+import { StyleSheet, Keyboard, KeyboardEvent, Platform } from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react';
 
 // components
 import { Card } from 'react-native-paper'
 import ShareIconButton from '../../../buttons/common_icon_buttons/ShareIconButton';
-import AddIconButton from '../../../buttons/common_icon_buttons/AddIconButton';
+// import AddIconButton from '../../../buttons/common_icon_buttons/AddIconButton';
+import AddCollectionIconButton from '@/src/components/buttons/common_icon_buttons/AddCollectionIconButton';
 import AnimatedActivityIndicator from '@/src/components/icons/AnimatedActivityIndicator/AnimatedActivityIndicator';
 // import FavoriteIconButton from '../../../buttons/common_icon_buttons/FavoriteIconButton';
 
@@ -28,7 +29,7 @@ interface EditableCardProps {
 
   isFullscreen: boolean,
   isSharable: boolean,
-  isNewNote: boolean,
+  // isNewNote: boolean,
 
   cardColorDict: {
     'background': string,
@@ -45,7 +46,7 @@ interface EditableCardProps {
 // editable card, default fullscreen
 const EditableCard = (
   {
-    entryData = defaultEntryData,
+    entryData,
     mode = 'outlined',
     isFullscreen = true,
     isSharable = true,
@@ -59,6 +60,17 @@ const EditableCard = (
   }: Partial<EditableCardProps>
 ) => {
 
+  // split entryData into parts to allow for partial editing
+  const [title, setTitle] = useState<string | undefined>(entryData?.title);
+  const [subtitle, setSubtitle] = useState<string | undefined>(entryData?.subtitle);
+  const [description, setDescription] = useState<string | undefined>(entryData?.description);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+
+  const [keyboardOffset, setKeyboardOffset] = useState(0)
+  // const debouncedTitle = useDebounce(title, 1000);
+  // const debouncedSubtitle = useDebounce(subtitle, 1000);
+  // const debouncedDescription = useDebounce(description, 1000);
+
   const styles = StyleSheet.create({
     card: {
       backgroundColor: cardColorDict.background,
@@ -66,31 +78,35 @@ const EditableCard = (
       // borderColor: cardColorDict.border,
       // minWidth: 260,
       width: isFullscreen ? magpieDimensions.vw : cardDimensions.width * 1.5,
-      height: isFullscreen ? magpieDimensions.vh : cardDimensions.height * 1.5,
+      height: isFullscreen ? magpieDimensions.vh - keyboardOffset : cardDimensions.height * 1.5,
       borderRadius: isFullscreen ? cardDimensions.borderRadius : 0,
-    },
-    // cardTitle: {
-    //   color: cardColorDict.text
-    // },
-    // cardContent: {
-    //   color: cardColorDict.text,
-    //   paddingHorizontal: cardPaddingHorizontal,
-    //   paddingVertical: cardPaddingVertical,
-    //   height: '100%'
-    // },
-    // cardLastContent: {
-    //   paddingVertical: 0
-    // }
+      // position: 'absolute',
+      // bottom: bottom
+    }
   })
 
-  // split entryData into parts to allow for partial editing
-  const [title, setTitle] = useState<string | undefined>(entryData?.title);
-  const [subtitle, setSubtitle] = useState<string | undefined>(entryData?.subtitle);
-  const [description, setDescription] = useState<string | undefined>(entryData?.description);
-  const [isSaving, setIsSaving] = useState<boolean>(false);
-  // const debouncedTitle = useDebounce(title, 1000);
-  // const debouncedSubtitle = useDebounce(subtitle, 1000);
-  // const debouncedDescription = useDebounce(description, 1000);
+  // adjust modal height for keyboard
+  useEffect(() => {
+    function onKeyboardChange(e: KeyboardEvent) {
+      // console.log('keyboard event', e);
+      if (e.endCoordinates.screenY <= magpieDimensions.vh)
+        // if (e.endCoordinates.screenY <= e.startCoordinates.screenY)
+        // setBottom(0)
+        setKeyboardOffset(e.endCoordinates.height)
+      else setKeyboardOffset(0)
+    }
+
+    if (Platform.OS === "ios") {
+      const subscription = Keyboard.addListener("keyboardWillChangeFrame", onKeyboardChange)
+      return () => subscription.remove()
+    }
+
+    const subscriptions = [
+      Keyboard.addListener("keyboardDidHide", onKeyboardChange),
+      Keyboard.addListener("keyboardDidShow", onKeyboardChange),
+    ]
+    return () => subscriptions.forEach((subscription) => subscription.remove())
+  }, [])
 
   // note content change handlers
   const handleChangeContent = useCallback((
@@ -100,7 +116,7 @@ const EditableCard = (
   ) => {
     // console.log('editing...')
     if (entryData?.id) {
-      console.log('saving.')
+      // console.log('saving.')
       updateNoteByID(entryData.id, columnName, updatedContent);
       setIsSaving(false);
     }
@@ -108,11 +124,6 @@ const EditableCard = (
   }, []);
 
   const debouncedChangeContent = useDebounceFunction(handleChangeContent, 1000);
-
-  // const debouncedChangeContent = (...args: any[]) => {
-  //   return useDebounceFunction(handleChangeContent, 1000)
-  // }
-
 
   const handleChangeTitle = (updatedText: string) => {
     // update FE state
@@ -132,7 +143,7 @@ const EditableCard = (
   };
 
   const handleDeleteNote = async () => {
-    await deleteNoteByID(entryData.id); // delete note from BE
+    await deleteNoteByID(entryData?.id); // delete note from BE
     await closeCardFn(); // close card
   };
 
@@ -143,16 +154,14 @@ const EditableCard = (
   const bottomCardIcons = [
     // <FavoriteIconButton contentSize={20} />,
     <DeleteIconButton contentSize={20} onPressFn={handleDeleteNote} />,
-    <AddIconButton contentSize={20} onPressFn={() => { console.log('pressed add btn') }} />,
+    <AddCollectionIconButton contentSize={20} onPressFn={() => { console.log('pressed add to collection btn') }} />,
     <ShareIconButton contentSize={20} onPressFn={() => { console.log('pressed share btn') }} />
   ];
 
   return (
     <Card
       mode={mode}
-      onPress={() => {
-        onPressFn();
-      }}
+      onPress={onPressFn}
       onLongPress={onLongPressFn}
       style={styles.card}
     >

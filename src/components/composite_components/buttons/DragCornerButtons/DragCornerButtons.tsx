@@ -2,6 +2,7 @@ import { StyleSheet, Text } from 'react-native'
 import React, { ReactElement } from 'react';
 import { View, MotiView } from 'moti';
 import { magpieDimensions, cornerButtonDistance, defaultButtonSize } from '@/assets/constants/magpieDimensions';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface DragCornerButtonsProps {
   buttons: Array<ReactElement>,
@@ -29,7 +30,7 @@ const DragCornerButtons = ({
       // backgroundColor: 'transparent',
       backgroundColor: '#00000060', // 40% transparency
       width: magpieDimensions.vw,
-      height: magpieDimensions.vh,
+      height: magpieDimensions.vh * 1.05,
       overflow: 'hidden',
       zIndex: 10
     },
@@ -42,6 +43,7 @@ const DragCornerButtons = ({
 
 
   return (
+    // <SafeAreaView>
     <View style={styles.dragCornerButtonsContainer}>
       {buttons && buttons.map((button, index) => (
         <MotiView
@@ -66,6 +68,7 @@ const DragCornerButtons = ({
         </MotiView>
       ))}
     </View>
+    // </SafeAreaView>
   )
 }
 

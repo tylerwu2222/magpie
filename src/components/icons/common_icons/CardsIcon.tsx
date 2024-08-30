@@ -7,7 +7,7 @@ export default function CardsIcon() {
     <ExpoIcon
         library='MaterialCommunityIcons'
         name={'cards'}
-        color={Colors.accentBlueButton.text}
+        color={Colors.accentBlueContentButton.text}
     />
   )
 }

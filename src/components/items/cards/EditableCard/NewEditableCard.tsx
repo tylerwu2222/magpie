@@ -1,12 +1,13 @@
-import { StyleSheet } from 'react-native';
-import React, { useState } from 'react';
+import { StyleSheet, Keyboard, KeyboardEvent, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
 
 // components
 import { Card } from 'react-native-paper'
 import ShareIconButton from '../../../buttons/common_icon_buttons/ShareIconButton';
 
-import AddIconButton from '../../../buttons/common_icon_buttons/AddIconButton';
-import FavoriteIconButton from '../../../buttons/common_icon_buttons/FavoriteIconButton';
+// import AddIconButton from '../../../buttons/common_icon_buttons/AddIconButton';
+import AddCollectionIconButton from '@/src/components/buttons/common_icon_buttons/AddCollectionIconButton';
+// import FavoriteIconButton from '../../../buttons/common_icon_buttons/FavoriteIconButton';
 
 // styles
 import { Colors } from '@/assets/constants/Colors';
@@ -17,7 +18,7 @@ import { cardDimensions, magpieDimensions } from '@/assets/constants/magpieDimen
 import AnimatedCardContent from '../AnimatedCardContent';
 import CloseIconButton from '@/src/components/buttons/common_icon_buttons/CloseIconButton';
 
-import { addNote, updateNoteByID } from '@/src/api/notes';
+import { addNote } from '@/src/api/notes';
 
 interface NewEditableCardProps {
   mode: 'elevated' | 'outlined' | 'contained',
@@ -53,13 +54,19 @@ const NewEditableCard = (
   }: Partial<NewEditableCardProps>
 ) => {
 
+
+  const [title, setTitle] = useState<string | undefined>('');
+  const [subtitle, setSubtitle] = useState<string | undefined>('');
+  const [description, setDescription] = useState<string | undefined>('');
+  const [keyboardOffset, setKeyboardOffset] = useState(0)
+
   const styles = StyleSheet.create({
     card: {
       backgroundColor: cardColorDict.background,
       borderColor: cardColorDict.border,
       // minWidth: 260,
       width: isFullscreen ? magpieDimensions.vw : cardDimensions.width * 1.5,
-      height: isFullscreen ? magpieDimensions.vh : cardDimensions.height * 1.5,
+      height: isFullscreen ? magpieDimensions.vh - keyboardOffset : cardDimensions.height * 1.5,
       borderRadius: isFullscreen ? cardDimensions.borderRadius : 0
     },
     cardTitle: {
@@ -76,32 +83,58 @@ const NewEditableCard = (
     }
   })
 
-  // initialize new note content as empty
-  // const [newNoteEmpty, setNewNoteEmpty] = useState(true);
-  const [newNoteContent, setNewNoteContent] = useState({
-    user_id: 1, // NEED TO UPDATE WITH REAL ID LATER
-    title: '',
-    subtitle: '',
-    description: '',
-  });
+
+  // adjust modal height for keyboard
+  useEffect(() => {
+    function onKeyboardChange(e: KeyboardEvent) {
+      // console.log('keyboard event', e);
+      if (e.endCoordinates.screenY <= magpieDimensions.vh)
+        // if (e.endCoordinates.screenY <= e.startCoordinates.screenY)
+        // setBottom(0)
+        setKeyboardOffset(e.endCoordinates.height)
+      else setKeyboardOffset(0)
+    }
+
+    if (Platform.OS === "ios") {
+      const subscription = Keyboard.addListener("keyboardWillChangeFrame", onKeyboardChange)
+      return () => subscription.remove()
+    }
+
+    const subscriptions = [
+      Keyboard.addListener("keyboardDidHide", onKeyboardChange),
+      Keyboard.addListener("keyboardDidShow", onKeyboardChange),
+    ]
+    return () => subscriptions.forEach((subscription) => subscription.remove())
+  }, [])
 
   const getNoteLength = () => {
-    return newNoteContent.title.length + newNoteContent.subtitle.length + newNoteContent.description.length;
+    if (title && subtitle && description)
+      return title.length + subtitle.length + description.length;
+    else return 0;
   }
 
   const handleChangeTitle = (updatedText: string) => {
-    setNewNoteContent({ ...newNoteContent, title: updatedText });
+    // console.log('new title', updatedText);
+    setTitle(updatedText);
+    // setNewNoteContent({ ...newNoteContent, title: updatedText });
   };
   const handleChangeSubtitle = (updatedText: string) => {
-    setNewNoteContent({ ...newNoteContent, subtitle: updatedText });
+    setSubtitle(updatedText);
+    // setNewNoteContent({ ...newNoteContent, subtitle: updatedText });
   };
   const handleChangeDescription = (updatedText: string) => {
-    setNewNoteContent({ ...newNoteContent, description: updatedText, });
+    setDescription(updatedText);
+    // setNewNoteContent({ ...newNoteContent, description: updatedText, });
   };
 
   const closeNewCardFn = async () => {
     // add new note to BE if there is content
     if (getNoteLength() > 0) {
+      const newNoteContent = {
+        title: title,
+        subtitle: subtitle,
+        description: description
+      }
       await addNote(newNoteContent);
     }
     await closeCardFn(); // visually close new note
@@ -112,26 +145,25 @@ const NewEditableCard = (
   ];
   const bottomCardIcons = [
     // <FavoriteIconButton contentSize={20} />,
-    <AddIconButton contentSize={20} onPressFn={() => { console.log('pressed add btn') }} />,
-    <ShareIconButton contentSize={20} />];
+    <AddCollectionIconButton contentSize={20} onPressFn={() => { console.log('pressed add to collection btn') }} />,
+    <ShareIconButton contentSize={20} onPressFn={() => { console.log('pressed share btn') }} />
+  ];
 
 
   return (
     <Card
       mode={mode}
-      // onPress={() => {
-      //   onPressFn();
-      // }}
+      onPress={onPressFn}
       // onLongPress={onLongPressFn}
       style={styles.card}
     >
       <AnimatedCardContent
         topRightCardIcons={topRightCardIcons}
         bottomCardIcons={bottomCardIcons}
-        styles={styles}
-        title={newNoteContent.title}
-        subtitle={newNoteContent.subtitle}
-        description={newNoteContent.description}
+        // styles={styles}
+        title={title}
+        subtitle={subtitle}
+        description={description}
         titleChangeFn={handleChangeTitle}
         subtitleChangeFn={handleChangeSubtitle}
         descriptionChangeFn={handleChangeDescription}

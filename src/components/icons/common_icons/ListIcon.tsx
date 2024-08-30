@@ -7,7 +7,7 @@ export default function ListIcon() {
     <ExpoIcon
         library='MaterialCommunityIcons'
         name={'format-list-bulleted'}
-        color={Colors.accentBlueButton.text}
+        color={Colors.accentBlueContentButton.text}
     />
   )
 }

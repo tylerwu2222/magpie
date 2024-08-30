@@ -83,9 +83,10 @@ const BottomNavbar = (
       <View style={styles.bottomNavbarView}>
         <View style={styles.leftSideView}>
           <SliderButtonSelect
-            // iconList={[<GraphTreeIcon />, <GridIcon />, <ListIcon />, <CardsIcon />]}
-            iconList={[ <ListIcon />, <CardsIcon />, <GridIcon />]}
+            // iconList={[ <ListIcon />, <CardsIcon />, <GridIcon />]}
+            iconList={[ <ListIcon />,  <GridIcon />]}
             sliderBackgroundColor={Colors.lightTheme.lightBackground}
+            iconBackgroundColor={Colors.darkGreyContentButton.ripple}
             iconChangeFn={handleViewChange}
           />
         </View>

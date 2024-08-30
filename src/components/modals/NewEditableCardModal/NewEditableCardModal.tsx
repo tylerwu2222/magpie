@@ -1,17 +1,9 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { useContext } from 'react';
+import { StyleSheet } from 'react-native'
+import React from 'react';
 
 import { Portal, Modal } from 'react-native-paper';
-// import Modal from "react-native-modal";
-// import { BlurView } from 'expo-blur';
-
-// import BlurOverlayContext, { BlurOverlayProvider } from '@/src/providers/OverlayProviders/BlurOverlayProvider';
-
-import { cardDimensions, magpieDimensions } from '@/assets/constants/magpieDimensions';
-import { entryDataType } from '@/src/types/data';
+import { cardDimensions } from '@/assets/constants/magpieDimensions';
 import NewEditableCard from '../../items/cards/EditableCard/NewEditableCard';
-
-// use BlurOverlayProvider with EditableCard as child.
 
 interface NewEditableCardModalProps {
     visible: boolean,
@@ -26,10 +18,6 @@ const NewEditableCardModal = ({
 }: Partial<NewEditableCardModalProps>
 ) => {
 
-    // const {
-    //     hideBlurOverlay
-    // } = useContext(BlurOverlayContext);
-
     const styles = StyleSheet.create({
         modalContainer: {
             display: 'flex',
@@ -39,16 +27,12 @@ const NewEditableCardModal = ({
         },
         cardModal: {
             alignSelf: fullScreen ? 'flex-start' : 'center',
-            width: cardDimensions.width,
-            height: cardDimensions.height,
             borderRadius: cardDimensions.borderRadius
         }
     })
 
     return (
         <>
-            {/* <BlurOverlayProvider> */}
-            {/* <View style={styles.modalContainer}> */}
             <Portal>
                 <Modal
                     visible={visible}
@@ -67,8 +51,6 @@ const NewEditableCardModal = ({
                     />
                 </Modal>
             </Portal>
-            {/* </View> */}
-            {/* </BlurOverlayProvider> */}
         </>
     )
 }

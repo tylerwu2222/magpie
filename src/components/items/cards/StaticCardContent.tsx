@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Card } from 'react-native-paper';
 import CustomTextInput from '../../inputs/textInput/TextInput';
 import { cardDimensions } from '@/assets/constants/magpieDimensions';
@@ -54,48 +54,20 @@ export default function StaticCardContent({
     })
 
     return (
-        <>
-            <Card.Content style={styles.cardContent}>
-                {topRightCardIcons ? <View style={additionalStyles.topRightIconsView}>
-                    <Card.Actions>
-                        {
-                            topRightCardIcons.map((icon, index) => {
-                                return <View key={index}>
-                                    {icon}
-                                </View>
-                            })
-                        }
-                    </Card.Actions>
-                </View> : <></>}
-                <CustomTextInput
-                    placeholder={showPlaceholders ? 'a note needs a good title...' : ''}
-                    value={entryData?.title ? entryData.title : title}
-                    textInputColor={Colors.lightTheme.transparentTextInput}
-                    paddingHorizontal={8} // match default of Card.Title
-                    fontSize={cardDimensions.titleFontSize}
-                    isEditable={isEditable}
-                    onChangeTextFn={titleChangeFn}
-                />
-                <CustomTextInput
-                    placeholder={showPlaceholders ? 'and sometimes a subtitle...' : ''}
-                    value={entryData?.subtitle ? entryData.subtitle : subtitle}
-                    textInputColor={Colors.lightTheme.transparentTextInput}
-                    paddingHorizontal={8}
-                    fontSize={cardDimensions.subtitleFontSize}
-                    isEditable={isEditable}
-                    onChangeTextFn={subtitleChangeFn}
-                />
-                <CustomTextInput
-                    placeholder={showPlaceholders ? 'add something...' : ''}
-                    value={entryData?.description ? entryData.description : description}
-                    textInputColor={Colors.lightTheme.transparentTextInput}
-                    isEditable={isEditable}
-                    isMultiline={true}
-                    fontSize={cardDimensions.textFontSize}
-                    paddingHorizontal={8}
-                    onChangeTextFn={descriptionChangeFn}
-                />
-            </Card.Content>
+        <View>
+            <View style={styles.cardContent}>
+                <Text
+                    style={styles.cardTitle}
+                >{entryData?.title ? entryData.title : title}</Text>
+                <Text
+                    style={styles.cardSubtitle}
+                >{entryData?.subtitle ? entryData.subtitle : subtitle}</Text>
+                <Text
+                    style={styles.cardDescription}
+                >
+                    {entryData?.description ? entryData.description : description}
+                </Text>
+            </View>
             {/* card image */}
             {hasImage ? <Card.Content style={[styles.cardContent, styles.cardLastContent]}>
                 <Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
@@ -113,6 +85,6 @@ export default function StaticCardContent({
                 </View> :
                 <></>
             }
-        </>
+        </View>
     )
 }

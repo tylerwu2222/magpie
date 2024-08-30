@@ -37,7 +37,7 @@ const magpie_blue = '#0a7ea4';
 const magpie_white = '#fefefe';
 const magpie_grey_lightest = '#fCfCfC';
 const magpie_grey_lighter = '#F9F9F9';
-const magpie_grey_light = '#D9D9D9';
+const magpie_grey_light = '#e9e9e9';
 const magpie_grey_light_light_medium = '#CCCCCC';
 const magpie_grey_light_medium = '#BABABA';
 const magpie_grey_medium = '#7F7F7F';
@@ -55,7 +55,8 @@ export const Colors = {
   // screen themes
   lightTheme: {
     text: magpie_logo_black,
-    background: magpie_logo_white,
+    background: magpie_grey_lighter,
+    darkBackground: magpie_grey_light,
     lightBackground: magpie_grey_lightest,
     tint: magpie_blue,
     textInput: {
@@ -86,7 +87,7 @@ export const Colors = {
   },
   // card color themes
   lightCard: {
-    background: magpie_logo_white,
+    background: magpie_blue_light_medium,
     border: magpie_grey_darker,
     text: magpie_grey_dark
   },
@@ -126,23 +127,29 @@ export const Colors = {
     toggle: magpie_grey_light_medium,
     text: magpie_logo_black
   },
-  accentBlueButton: {
+  accentBlueContentButton: {
     // default: magpie_blue_light_medium,
     default: 'transparent',
-    ripple: magpie_blue_light,
-    text: magpie_blue
+    ripple: magpie_grey_medium,
+    text: magpie_grey_dark
   },
-  favoriteButton: {
+  accentBlueButtonFilled: {
+    default: magpie_blue_medium,
+    // default: 'transparent',
+    ripple: magpie_blue_light_medium,
+    text: magpie_grey_dark
+  },
+  darkGreyContentButton: {
     // default: magpie_grey_light_medium,
     default: 'transparent',
-    ripple: magpie_grey_medium,
-    toggle: magpie_blue,
-    text: magpie_blue
+    ripple: magpie_grey_light,
+    toggle: magpie_grey_dark,
+    text: magpie_grey_dark
   },
-  favoriteButtonFilled: {
+  darkGreyButtonFilled: {
     // default: magpie_grey_light_medium,
-    default: magpie_blue_medium,
-    ripple: magpie_blue_medium,
+    default: magpie_grey_dark,
+    ripple: magpie_grey_medium_dark,
     toggle: magpie_blue_light,
     text: magpie_white
   },

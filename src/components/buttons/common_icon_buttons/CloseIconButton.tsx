@@ -7,7 +7,7 @@ import { basicButtonType } from '@/src/types/components'
 export default function CloseIconButton({
     isDisabled,
     contentSize = 40,
-    buttonColorDict = Colors.accentBlueButton,
+    buttonColorDict = Colors.accentBlueContentButton,
     onPressFn = () => { }
 }: basicButtonType) {
     return (
@@ -19,7 +19,7 @@ export default function CloseIconButton({
             buttonColorDict={buttonColorDict}
             onPressFn={() => { 
                 onPressFn();
-                console.log('close button pressed');
+                // console.log('close button pressed');
             }}
         />
     )

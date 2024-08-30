@@ -1,10 +1,10 @@
-import { Pressable, StyleSheet, View, ScrollView } from 'react-native';
-
+import { StyleSheet, View } from 'react-native';
+import { runOnJS } from 'react-native-reanimated';
 // animation and gesture
 import { MotiView } from 'moti';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 
-import React, { ReactElement, useState } from 'react'
+import React, { cloneElement, ReactElement, useState } from 'react'
 import { Colors } from '@/assets/constants/Colors';
 
 interface SliderButtonSelectProps {
@@ -30,9 +30,9 @@ const SliderButtonSelect = ({
   // numberIconsShown = 3,
   iconHeight = 40,
   iconPadding = 10,
-  iconBorderRadius = 20,
+  iconBorderRadius = 40,
   sliderBackgroundColor = 'white',
-  iconBackgroundColor = Colors.accentBlueButton.ripple,
+  iconBackgroundColor = Colors.darkGreyContentButton.ripple,
   openDirection = 'up',
   fade = true,
   iconChangeFn = (selectedIcon) => { }
@@ -54,11 +54,6 @@ const SliderButtonSelect = ({
       overflow: 'hidden',
       backgroundColor: sliderBackgroundColor
     },
-    iconListView: {
-      // flexDirection: 'column-reverse',
-      // flexDirection: 'column',
-      // alignItems: 'flex-end'
-    },
     iconView: {
       borderRadius: iconBorderRadius
     },
@@ -69,26 +64,25 @@ const SliderButtonSelect = ({
 
   const [sliderOpen, setSliderOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
-  const [selectedIcon, setSelectedIcon] = useState<ReactElement | null>(null);
   const [dynamicIconList, setDynamicIconList] = useState(iconList);
 
   // moves element in index
   const moveToFront = (arr: Array<ReactElement>, index: number) => {
-    if (index >= arr.length || index < 0) {
-      return arr;
+    const arrCopy = [...arr];
+    if (index < arrCopy.length && index >= 0) {
+      const indexToEnd = arrCopy.slice(index);
+      const startToIndex = arrCopy.slice(0, index);
+      setDynamicIconList([...indexToEnd, ...startToIndex]);
     }
-    const indexToEnd = arr.slice(index);
-    const startToIndex = arr.slice(0, index);
-    return [...indexToEnd, ...startToIndex];
   }
   const moveToEnd = (arr: Array<ReactElement>, index: number) => {
-    if (index >= arr.length || index < 0) {
-      return arr;
-    }
+    const arrCopy = [...arr];
     // move 0 to index, inclusive of index
-    const indexToEnd = arr.slice(index + 1);
-    const startToIndex = arr.slice(0, index + 1);
-    return [...indexToEnd, ...startToIndex];
+    if (index < arrCopy.length && index >= 0) {
+      const indexToEnd = arrCopy.slice(index + 1);
+      const startToIndex = arrCopy.slice(0, index + 1);
+      setDynamicIconList([...indexToEnd, ...startToIndex]);
+    }
   }
 
   // slider handlers
@@ -101,9 +95,17 @@ const SliderButtonSelect = ({
     setHighlightedIndex(null);
   }
 
-  const pan = Gesture.Pan()
-    // .onBegin(() => handleSliderOpen())
+  // const longPress = Gesture.LongPress()
+
+  const panDelay = 200;
+  const pan = Gesture.Pan().activateAfterLongPress(panDelay)
+    .onStart(() => {
+      // console.log('start pan');
+      runOnJS(handleSliderOpen)() // something wrong with setSlider open effects?
+    }
+    )
     .onUpdate((event) => {
+      // console.log('update pan');
       // update highlighted index
       const sliderOffset = (iconList.length + 2.5) * iconHeight / 2;
       // translated amount (in pixels) / height of icon with padding (in pixels)
@@ -111,26 +113,29 @@ const SliderButtonSelect = ({
       // console.log('closest',closestIndex);
       // only update if within range
       if (closestIndex >= 0 && closestIndex < iconList.length) {
-        setHighlightedIndex(closestIndex);
+        runOnJS(setHighlightedIndex)(closestIndex);
       }
 
     })
     .onEnd(() => {
+      // console.log('end pan')
       // set the selected icon once user releases pan
       if (highlightedIndex !== null) {
-        setSelectedIcon(dynamicIconList[highlightedIndex]);
-        iconChangeFn(dynamicIconList[highlightedIndex]);
+        // setSelectedIcon(dynamicIconList[highlightedIndex]);
+        runOnJS(iconChangeFn)(dynamicIconList[highlightedIndex]);
         // reorder icon list, so selected icon is first
         if (openDirection == 'up') {
-          setDynamicIconList(moveToEnd(dynamicIconList, highlightedIndex));
+          runOnJS(moveToEnd)(dynamicIconList, highlightedIndex);
         }
         else if (openDirection == 'down') {
-          setDynamicIconList(moveToFront(dynamicIconList, highlightedIndex));
+          runOnJS(moveToFront)(dynamicIconList, highlightedIndex);
         }
       }
-      // handleSliderClose();
+      runOnJS(handleSliderClose)();
     });
   ;
+
+
 
   // animate slider view, and also translate Y, so slider u=opens upwards
   return (
@@ -140,7 +145,7 @@ const SliderButtonSelect = ({
         style={styles.sliderButtonSelectView}
         animate={{
           height: sliderOpen ?
-            paddedListViewHeight : //
+            paddedListViewHeight :
             trueIconHeight + iconPadding,
           translateY: openDirection == 'up' ? (sliderOpen ? -(iconList.length * iconHeight / 2 + iconPadding) : 0) :
             (sliderOpen ? (iconList.length * iconHeight / 2 + iconPadding) : 0)
@@ -148,33 +153,31 @@ const SliderButtonSelect = ({
         transition={{
           type: 'timing',
           duration: sliderAnimateDuration,
-          // delay: sliderOpen ? 100 : 0, // Add delay when opening the slider
         }}
       >
-        <Pressable
-          onPressIn={handleSliderOpen}
-          onPressOut={handleSliderClose}
+        {/* icon lists */}
+        <MotiView
+          animate={{
+            translateY: openDirection == 'up' ? (sliderOpen ? 0 : -((iconList.length - 1) * (trueIconHeight))) :
+              (sliderOpen ? 0 : (iconList.length - 1) * (trueIconHeight))
+          }}
+          transition={{
+            type: 'timing',
+            duration: sliderAnimateDuration,
+            // delay: sliderOpen ? 100 : 0, // Add delay when opening the slider
+          }}
         >
-          {/* icon lists */}
-          <MotiView style={styles.iconListView}
-            animate={{
-              translateY: openDirection == 'up' ? (sliderOpen ? 0 : -((iconList.length - 1) * (trueIconHeight))) :
-                (sliderOpen ? 0 : (iconList.length - 1) * (trueIconHeight))
-            }}
-            transition={{
-              type: 'timing',
-              duration: sliderAnimateDuration,
-              // delay: sliderOpen ? 100 : 0, // Add delay when opening the slider
-            }}
-          >
-            {dynamicIconList.map((icon, index) => {
-              return <View key={index} style={[index == highlightedIndex ? styles.highlightedIconView : null, styles.iconView]}>
-                {icon}
-              </View>
-            }
-            )}
-          </MotiView>
-        </Pressable>
+          {dynamicIconList.map((icon, index) => {
+            const clonedIcon = cloneElement(icon); // need to clone icon for some reason
+            return (<View
+              key={index}
+              style={[index == highlightedIndex ? styles.highlightedIconView : null, styles.iconView]}
+            >
+              {clonedIcon}
+            </View>)
+          }
+          )}
+        </MotiView>
       </MotiView>
     </GestureDetector>
   )

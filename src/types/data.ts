@@ -5,7 +5,9 @@ export type entryDataType = {
     title?: string,
     subtitle?: string,
     image?: string,
-    description?: string
+    description?: string,
+    updated_at?: Date,
+    created_at?: Date
 };
 
 export type newEntryDataType = {
@@ -13,7 +15,9 @@ export type newEntryDataType = {
     title?: string,
     subtitle?: string,
     image?: string,
-    description?: string
+    description?: string,
+    updated_at?: Date,
+    created_at?: Date
 };
 
 export type setEntryDataType = Dispatch<SetStateAction<Array<entryDataType>>>;

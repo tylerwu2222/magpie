@@ -8,6 +8,7 @@ import { magpieDimensions } from '@/assets/constants/magpieDimensions';
 // import OutsidePressHandler from 'react-native-outside-press';
 
 interface SearchBarProps {
+    leftIcon: string,
     placeholder: string;
     defaultSearchQuery: string;
     searchBarColorDict: {
@@ -18,18 +19,23 @@ interface SearchBarProps {
     searchQuery: string,
     setSearchQuery: Dispatch<SetStateAction<string>>,
     onChangeTextFn: () => void,
+    onIconPressFn: () => void,
+    isAutoCapitalized: "none" | "sentences" | "words" | "characters" | undefined,
     expandsFull: boolean
 }
 
 const SearchBar = (
     {
-        placeholder = 'Search nest',
+        leftIcon = 'magnify',
+        placeholder = 'Search notes',
         defaultSearchQuery = '',
         // searchBarColorDict = Colors.lightTheme.textInput,
         searchBarColorDict = Colors.darkTheme.textInput,
         searchQuery = '',
         setSearchQuery = () => { },
         onChangeTextFn = () => { },
+        onIconPressFn = () => { },
+        isAutoCapitalized = 'none',
         expandsFull = true
     }: Partial<SearchBarProps>
 ) => {
@@ -69,18 +75,23 @@ const SearchBar = (
         // onOutsidePress={handleOutsidePress}>
         //     <Pressable onPress={handlePress}>
         <Searchbar
+            icon={leftIcon}
             placeholder={placeholder}
             value={searchQuery}
+            autoCapitalize={isAutoCapitalized}
             onChangeText={(e) => {
                 setSearchQuery(e);
                 onChangeTextFn();
             }}
+            onIconPress={onIconPressFn}
             style={styles.searchBar}
             inputStyle={styles.searchBarInput}
-            theme={{colors: {
-                onSurfaceVariant: searchBarColorDict.text,
-                onSurface: searchBarColorDict.placeholder
-            }}}
+            theme={{
+                colors: {
+                    onSurfaceVariant: searchBarColorDict.text,
+                    onSurface: searchBarColorDict.placeholder
+                }
+            }}
         />
         //     </Pressable>
         // </OutsidePressHandler>

@@ -7,7 +7,7 @@ import { basicButtonType } from '@/src/types/components'
 export default function GraphIconButton({
     isDisabled,
     contentSize = 40,
-    buttonColorDict = Colors.accentBlueButton
+    buttonColorDict = Colors.accentBlueContentButton
 }: basicButtonType) {
     return (
         <CustomIconButton

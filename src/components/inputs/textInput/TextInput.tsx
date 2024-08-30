@@ -8,33 +8,35 @@ import React, { useState } from 'react';
 import { Colors } from '@/assets/constants/Colors';
 
 interface CustomTextInputProps {
-    label: string | undefined;
-    mode: 'flat' | 'outlined';
-    placeholder: string;
-    value: string | undefined;
+    label: string | undefined,
+    mode: 'flat' | 'outlined',
+    placeholder: string,
+    value: string | undefined,
 
 
-    isEditable: boolean;
-    isDense: boolean;
-    isMultiline: boolean;
-    isRequired: boolean;
-    isFullWidth: boolean;
-    hasBorder: boolean;
+    isEditable: boolean,
+    isDense: boolean,
+    isMultiline: boolean,
+    isRequired: boolean,
+    isFullWidth: boolean,
+    hasBorder: boolean,
+    isPassword: boolean,
+    useAutocapitalize: 'none'|'sentences'| 'words'| 'characters',
 
     startDisplayLines: number,
     endDisplayLines: number,
     fontSize: number,
     height: number | null,
-    paddingHorizontal: number;
-    paddingVertical: number;
-    borderWidth: number;
+    paddingHorizontal: number,
+    paddingVertical: number,
+    borderWidth: number,
     textInputColor: {
         'text': string,
         'placeholder': string,
         'background': string
-    };
-    maxLen: number;
-    onChangeTextFn: (text: string) => void;
+    },
+    maxLen: number,
+    onChangeTextFn: (text: string) => void
     // borderColor: string;
 }
 
@@ -51,6 +53,8 @@ const CustomTextInput = ({
     isRequired = false,
     isFullWidth = false,
     hasBorder = false, // equates to underline for flat text input
+    isPassword = false,
+    useAutocapitalize = 'none',
 
     startDisplayLines = 1,
     endDisplayLines = 100,
@@ -97,7 +101,8 @@ const CustomTextInput = ({
         // disabled={!isEditable}
         // editable={isEditable}
         placeholder={placeholder}
-        value={value}
+        // value={value}
+        defaultValue={value}
         onChangeText={onChangeTextFn}
 
         selectionColor={textInputColor.text}
@@ -107,6 +112,9 @@ const CustomTextInput = ({
         underlineColor={hasBorder ? textInputColor.placeholder : 'transparent'}
         activeUnderlineColor={hasBorder ? textInputColor.text : 'transparent'}
         multiline={isMultiline}
+        autoCapitalize={useAutocapitalize}
+        secureTextEntry={isPassword}
+
         // numberOfLines={startDisplayLines}
         dense={isMultiline ? false : isDense}
         style={styles.textInput}

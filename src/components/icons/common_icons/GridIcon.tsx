@@ -7,7 +7,7 @@ export default function GridIcon() {
     <ExpoIcon
         library='MaterialCommunityIcons'
         name={'view-grid'}
-        color={Colors.accentBlueButton.text}
+        color={Colors.accentBlueContentButton.text}
     />
   )
 }

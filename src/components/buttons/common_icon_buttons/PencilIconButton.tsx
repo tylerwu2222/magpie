@@ -9,7 +9,7 @@ export default function PencilIconButton({
     isDisabled,
     contentSize = defaultButtonSize,
     borderRadius,
-    buttonColorDict = Colors.accentBlueButton
+    buttonColorDict = Colors.accentBlueContentButton
 }: basicButtonType) {
     return (
         <CustomIconButton

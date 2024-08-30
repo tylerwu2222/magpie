@@ -13,8 +13,11 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
+    "@react-native-async-storage/async-storage": "^2.0.0",
+    "@rneui/themed": "^4.0.0-rc.8",
     "@shopify/flash-list": "^1.7.1",
     "@storybook/react": "^8.2.5",
+    "@supabase/supabase-js": "^2.45.2",
     "@types/react": "~18.2.79",
     "cors": "^2.8.5",
     "expo": "^51.0.0",
@@ -30,6 +33,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.74.3",
+    "react-native-dotenv": "^3.4.11",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-outside-press": "^1.2.2",
     "react-native-paper": "^5.12.3",
@@ -42,7 +46,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",
-    "@react-native-async-storage/async-storage": "^1.24.0",
     "@react-native-community/datetimepicker": "^8.2.0",
     "@react-native-community/slider": "^4.5.2",
     "@storybook/addon-ondevice-actions": "^7.6.20",

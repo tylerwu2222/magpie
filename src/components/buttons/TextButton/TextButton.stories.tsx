@@ -38,7 +38,7 @@ export const Basic: StoryObj<typeof TextButton> = {};
 // colored text
 export const ColorText: StoryObj<typeof TextButton> = {
   args: {
-    // buttonColorDict: Colors.accentBlueButton,
+    // buttonColorDict: Colors.accentBlueContentButton,
     buttonColorDict: Colors.redAccentButton,
   }
 };

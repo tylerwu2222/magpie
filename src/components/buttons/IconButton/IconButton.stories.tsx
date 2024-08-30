@@ -51,7 +51,7 @@ export const Basic: StoryObj<typeof CustomIconButton> = {
 //     iconComponent: 'plus',
 //     iconSize: 24,
 //     text: 'plus',
-//     buttonColorDict: Colors.accentBlueButton
+//     buttonColorDict: Colors.accentBlueContentButton
 //   },
 //   argTypes: {
 //     onPressFn: { action: 'help button pressed' }

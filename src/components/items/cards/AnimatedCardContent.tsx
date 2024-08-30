@@ -82,7 +82,7 @@ export default function AnimatedCardContent({
                     }
                 </View> : <></>}
                 <CustomTextInput
-                    placeholder={showPlaceholders ? 'a note needs a good title...' : ''}
+                    placeholder={showPlaceholders ? 'Title' : ''}
                     value={entryData?.title ? entryData.title : title}
                     textInputColor={Colors.lightTheme.transparentTextInput}
                     paddingHorizontal={8} // match default of Card.Title
@@ -91,7 +91,7 @@ export default function AnimatedCardContent({
                     onChangeTextFn={titleChangeFn}
                 />
                 <CustomTextInput
-                    placeholder={showPlaceholders ? 'and sometimes a subtitle...' : ''}
+                    placeholder={showPlaceholders ? 'Subtitle' : ''}
                     value={entryData?.subtitle ? entryData.subtitle : subtitle}
                     textInputColor={Colors.lightTheme.transparentTextInput}
                     paddingHorizontal={8}
@@ -100,7 +100,7 @@ export default function AnimatedCardContent({
                     onChangeTextFn={subtitleChangeFn}
                 />
                 <CustomTextInput
-                    placeholder={showPlaceholders ? 'add something...' : ''}
+                    placeholder={showPlaceholders ? 'Description' : ''}
                     value={entryData?.description ? entryData.description : description}
                     textInputColor={Colors.lightTheme.transparentTextInput}
                     isEditable={isEditable}

@@ -31,21 +31,24 @@ const ItemView = ({
     fetchSetNotes,
   } = useContext(HomeContext);
 
+
+  // console.log('displayed notes itemview', displayedNotes);
+
   // for handling card reordering
   const [staticCardAdditionalStyles, setStaticCardAdditionalStyles] = useState<any>();
   const [numberFlashlistColumns, setNumberFlashlistColumns] = useState(2);
 
   useEffect(() => {
-    console.log('homeItemViewType changed', homeItemViewType);
+    // console.log('homeItemViewType changed', homeItemViewType);
     if (homeItemViewType == 'list') {
       setNumberFlashlistColumns(1);
       setStaticCardAdditionalStyles(listStyle.card);
     }
-    if (homeItemViewType == 'grid'){
+    if (homeItemViewType == 'grid') {
       setNumberFlashlistColumns(2);
       setStaticCardAdditionalStyles(null);
     }
-    if (homeItemViewType == 'stack'){
+    if (homeItemViewType == 'stack') {
       setNumberFlashlistColumns(2);
       setStaticCardAdditionalStyles(null);
     }
@@ -114,7 +117,7 @@ const ItemView = ({
           numColumns={numberFlashlistColumns}
           estimatedItemSize={cardDimensions.height}
           renderItem={renderItem}
-          style={styles.deckContainerView}
+        // style={styles.deckContainerView}
         />
       </View>
       {/* <GridViewDeck notes={notes}/> */}

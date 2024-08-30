@@ -13,17 +13,17 @@ export const HomeCornerButtons = [
     contentSize={largerButtonSize}
     borderRadius={largerButtonSize} />,
   <CopyIconButton
-    buttonColorDict={Colors.favoriteButtonFilled}
+    buttonColorDict={Colors.darkGreyButtonFilled}
     contentSize={largerButtonSize}
     borderRadius={largerButtonSize}
   />,
   <AddCollectionIconButton
-    buttonColorDict={Colors.favoriteButtonFilled}
+    buttonColorDict={Colors.darkGreyButtonFilled}
     contentSize={largerButtonSize}
     borderRadius={largerButtonSize}
   />,
   <ShareIconButton
-    buttonColorDict={Colors.favoriteButtonFilled}
+    buttonColorDict={Colors.darkGreyButtonFilled}
     contentSize={largerButtonSize}
     borderRadius={largerButtonSize}
   />];

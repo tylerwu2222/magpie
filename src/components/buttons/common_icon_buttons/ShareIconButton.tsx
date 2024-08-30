@@ -10,11 +10,11 @@ export default function ShareIconButton({
     isDisabled,
     contentSize = defaultButtonSize,
     borderRadius,
-    buttonColorDict = Colors.accentBlueButton
+    buttonColorDict = Colors.accentBlueContentButton
 }: basicButtonType) {
     return (
         <CustomIconButton
-            // iconName={<ExpoIcon library='Entypo' name="share" size={20} color={Colors.accentBlueButton.text} />}
+            // iconName={<ExpoIcon library='Entypo' name="share" size={20} color={Colors.accentBlueContentButton.text} />}
             iconName={'share'}
             isDisabled={isDisabled}
             iconSize={contentSize}

@@ -55,12 +55,18 @@ const HomeTopNavbar = (
     }
   })
 
-  const navbarIcons = ['view', 'edit', 'new_collection', 'new_collection']
+  // const navbarIcons = ['view', 'edit', 'new_collection', 'new_collection']
 
   const {
     homeSearchQuery,
-    setHomeSearchQuery
+    setHomeSearchQuery,
+    setSideMenuVisible
   } = useContext(HomeContext);
+
+  const showSideMenu = () => {
+    // console.log('toggling side menu');
+    setSideMenuVisible(true)
+  }
 
   // console.log('notes in HTN', notes);
 
@@ -68,6 +74,8 @@ const HomeTopNavbar = (
     <View style={styles.HomeTopNavbarView}>
       <View style={styles.leftSideView}>
         <SearchBar
+          leftIcon='hamburger'
+          onIconPressFn={showSideMenu}
           searchQuery={homeSearchQuery}
           setSearchQuery={setHomeSearchQuery}
         />

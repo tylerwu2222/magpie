@@ -7,7 +7,7 @@ export default function GraphTreeIcon() {
     <ExpoIcon
         library='MaterialCommunityIcons'
         name={'graph'}
-        color={Colors.accentBlueButton.text}
+        color={Colors.accentBlueContentButton.text}
     />
   )
 }
