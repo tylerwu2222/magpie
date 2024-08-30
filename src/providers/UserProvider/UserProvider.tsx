@@ -18,6 +18,13 @@ export const getSessionUserID = async () => {
     return user?.id;
 };
 
+export const signOutUser = async () => {
+    const { error } = await supabase.auth.signOut()
+    if (error){
+        console.log('error signing out', error);
+    }
+}
+
 export default function UserProvider({ children }: { children: any }) {
     const [userID, setUserID] = useState<string | undefined>('')
 

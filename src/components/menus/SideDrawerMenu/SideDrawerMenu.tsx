@@ -8,6 +8,7 @@ import { magpieDimensions } from '@/assets/constants/magpieDimensions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '@/assets/constants/Colors';
 import { HomeContext } from '@/app/home';
+import { signOutUser } from '@/src/providers/UserProvider/UserProvider';
 
 const SideDrawerMenu = () => {
     const [active, setActive] = useState('');
@@ -37,7 +38,7 @@ const SideDrawerMenu = () => {
     });
 
     const handleLogout = () => {
-
+        signOutUser();
     };
 
     return (
