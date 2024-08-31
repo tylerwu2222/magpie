@@ -2,6 +2,10 @@ import { View, Text, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState, useRef, useEffect, createContext, Dispatch, SetStateAction } from 'react'
 
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { PaperProvider } from "react-native-paper";
+import { EventProvider } from 'react-native-outside-press';
+
 import NewEditableCardModal from '@/src/components/modals/NewEditableCardModal/NewEditableCardModal';
 import BottomNavbar from '@/src/components/navbars/BottomNavbar/BottomNavbar';
 import ItemView from '@/src/components/composite_components/views/ItemView/ItemView';
@@ -13,7 +17,7 @@ import { fetchNotes, addNote } from '@/src/api/notes';
 import DragCornerButtons from '@/src/components/composite_components/buttons/DragCornerButtons/DragCornerButtons';
 import { HomeCornerButtons } from '@/src/components/modals/HomeCornerButtons/HomeCornerButtons';
 import { largerButtonSize } from '@/assets/constants/magpieDimensions';
-import { Link } from 'expo-router';
+// import { Link } from 'expo-router';
 
 import { Session } from "@supabase/supabase-js";
 import { useUser } from '@/src/providers/UserProvider/UserProvider';
@@ -86,7 +90,7 @@ export default function Home({ session }: { session: Session }) {
 
   // fetch and set notes on component mount/user change
   useEffect(() => {
-    console.log('user id changed', userID);
+    // console.log('user id changed', userID);
     // if (userID !== '') {
     fetchSetNotes();
     // }
@@ -119,43 +123,48 @@ export default function Home({ session }: { session: Session }) {
   };
 
   return (
-    <HomeContext.Provider
-      value={{
-        homeItemViewType,
-        setHomeItemViewType,
-        displayedNotes,
-        setDisplayedNotes,
-        fetchSetNotes,
-        newNoteVisible,
-        setNewNoteVisible,
-        homeSearchQuery,
-        setHomeSearchQuery,
-        setCornerButtonsVisible,
-        isDraggableHoveringDelete,
-        setIsDraggableHoveringDelete,
-        sideMenuVisible,
-        setSideMenuVisible
-      }}>
-      <SafeAreaView>
-        {cornerButtonsVisible && <DragCornerButtons buttons={HomeCornerButtons} buttonSize={largerButtonSize} />}
-        <View style={styles.homeView}>
-          <AnimatePresence>{sideMenuVisible && <SideDrawerMenu />}</AnimatePresence>
-          <NewEditableCardModal
-            visible={newNoteVisible}
-            modalDismissFn={handleNewNoteClose}
-            fullScreen={true}
-          />
-          {/* search bar */}
-          <HomeTopNavbar />
-          {/* <Link href="/login"></Link> */}
-          {/* item view */}
-          {/* pass in view type and setter here */}
-          <ItemView />
-          {/* bottom navbar */}
-          <BottomNavbar />
-        </View>
-      </SafeAreaView>
-
-    </HomeContext.Provider>
+    <PaperProvider>
+      <EventProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <HomeContext.Provider
+            value={{
+              homeItemViewType,
+              setHomeItemViewType,
+              displayedNotes,
+              setDisplayedNotes,
+              fetchSetNotes,
+              newNoteVisible,
+              setNewNoteVisible,
+              homeSearchQuery,
+              setHomeSearchQuery,
+              setCornerButtonsVisible,
+              isDraggableHoveringDelete,
+              setIsDraggableHoveringDelete,
+              sideMenuVisible,
+              setSideMenuVisible
+            }}>
+            <SafeAreaView>
+              {cornerButtonsVisible && <DragCornerButtons buttons={HomeCornerButtons} buttonSize={largerButtonSize} />}
+              <View style={styles.homeView}>
+                <AnimatePresence>{sideMenuVisible && <SideDrawerMenu />}</AnimatePresence>
+                <NewEditableCardModal
+                  visible={newNoteVisible}
+                  modalDismissFn={handleNewNoteClose}
+                  fullScreen={true}
+                />
+                {/* search bar */}
+                <HomeTopNavbar />
+                {/* <Link href="/login"></Link> */}
+                {/* item view */}
+                {/* pass in view type and setter here */}
+                <ItemView />
+                {/* bottom navbar */}
+                <BottomNavbar />
+              </View>
+            </SafeAreaView>
+          </HomeContext.Provider>
+        </GestureHandlerRootView>
+      </EventProvider>
+    </PaperProvider>
   )
 }

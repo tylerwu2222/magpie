@@ -4,9 +4,7 @@ import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 
 // providers
-import { PaperProvider } from "react-native-paper";
-import { EventProvider } from 'react-native-outside-press';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 // import { SafeAreaView } from "react-native-safe-area-context";
 
 // animation
@@ -49,19 +47,11 @@ const Index = () => {
   }, [])
 
   return (
-    <PaperProvider>
-      <EventProvider>
-        {/* <UserProvider> */}
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <View style={{ height: '100%' }}>
-              {/* show login if no session, show home if session */}
-              {session && session.user ? <Home key={session.user.id} session={session} /> : <Auth />}
-              {/* {session && session.user ? <Account key={session.user.id} session={session} /> : <Auth />} */}
-            </View>
-          </GestureHandlerRootView>
-        {/* </UserProvider> */}
-      </EventProvider>
-    </PaperProvider>
+    <View style={{ height: '100%' }}>
+      {/* show login if no session, show home if session */}
+      {session && session.user ? <Home key={session.user.id} session={session} /> : <Auth />}
+      {/* {session && session.user ? <Account key={session.user.id} session={session} /> : <Auth />} */}
+    </View>
   );
 };
 

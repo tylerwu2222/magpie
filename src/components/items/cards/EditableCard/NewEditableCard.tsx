@@ -55,9 +55,9 @@ const NewEditableCard = (
 ) => {
 
 
-  const [title, setTitle] = useState<string | undefined>('');
-  const [subtitle, setSubtitle] = useState<string | undefined>('');
-  const [description, setDescription] = useState<string | undefined>('');
+  const [title, setTitle] = useState<string>('');
+  const [subtitle, setSubtitle] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
   const [keyboardOffset, setKeyboardOffset] = useState(0)
 
   const styles = StyleSheet.create({
@@ -67,7 +67,10 @@ const NewEditableCard = (
       // minWidth: 260,
       width: isFullscreen ? magpieDimensions.vw : cardDimensions.width * 1.5,
       height: isFullscreen ? magpieDimensions.vh - keyboardOffset : cardDimensions.height * 1.5,
-      borderRadius: isFullscreen ? cardDimensions.borderRadius : 0
+      // borderRadius: isFullscreen ? cardDimensions.borderRadius : 0
+      borderRadius: cardDimensions.borderRadius * 2,
+      borderTopLeftRadius: 0,
+      borderBottomRightRadius: 0,
     },
     cardTitle: {
       color: cardColorDict.text
@@ -108,9 +111,7 @@ const NewEditableCard = (
   }, [])
 
   const getNoteLength = () => {
-    if (title && subtitle && description)
-      return title.length + subtitle.length + description.length;
-    else return 0;
+    return title.length + subtitle.length + description.length;
   }
 
   const handleChangeTitle = (updatedText: string) => {

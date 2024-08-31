@@ -173,7 +173,7 @@ export const Colors = {
   },
   indicatorIcon: {
     icon: magpie_blue_medium_dark,
-    background: magpie_blue_light
+    background: 'transparent'
   },
 
   redText: category_colors.red,

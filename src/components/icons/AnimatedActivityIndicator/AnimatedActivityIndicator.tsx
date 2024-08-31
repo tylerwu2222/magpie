@@ -2,7 +2,7 @@ import { View, ActivityIndicator, StyleSheet } from 'react-native'
 import React from 'react'
 
 import { Colors } from '@/assets/constants/Colors'
-import { smallerButtonSize } from '@/assets/constants/magpieDimensions'
+import { largerButtonSize, smallerButtonSize } from '@/assets/constants/magpieDimensions'
 import { MotiView } from 'moti'
 
 interface AnimatedActivityIndicatorProps {
@@ -10,27 +10,29 @@ interface AnimatedActivityIndicatorProps {
         icon: string,
         background: string
     },
-    size: number | 'small' | 'large' | undefined
+    size: number | 'small' | 'large' | undefined,
+    hasPadding: boolean
 };
 
 export default function AnimatedActivityIndicator(
     {
         iconColorDict = Colors.indicatorIcon,
-        size = smallerButtonSize
+        size = smallerButtonSize,
+        hasPadding = true,
     }: Partial<AnimatedActivityIndicatorProps>
 ) {
 
     const styles = StyleSheet.create({
         activityIndicatorView: {
             display: 'flex',
-            // alignItems: 'center',
+            alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: iconColorDict.background,
-            padding: smallerButtonSize,
+            padding: hasPadding ? smallerButtonSize : 0,
             margin: 0,
             borderRadius: 15,
-            width: smallerButtonSize,
-            height: smallerButtonSize
+            // width: typeof size == 'number' ? size: smallerButtonSize,
+            // height: typeof size == 'number' ? size: smallerButtonSize
         }
     });
     return (

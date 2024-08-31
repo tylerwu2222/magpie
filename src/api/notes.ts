@@ -137,13 +137,13 @@ export const duplicateNoteByID = async (
   const { id, updated_at, created_at, ...noteContent } = originalNote;
 
   // Get the current time to set as the creation time for the duplicated note
-  const creationTime = new Date();
+  // const creationTime = new Date();
 
   // Create the duplicated note object
   const duplicatedNote = {
     ...noteContent,
-    created_at: creationTime,
-    updated_at: creationTime,
+    // created_at: creationTime,
+    // updated_at: creationTime,
   };
 
   try {

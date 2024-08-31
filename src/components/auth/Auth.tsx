@@ -7,6 +7,7 @@ import TextButton from '../buttons/TextButton/TextButton'
 import { Image } from 'moti'
 import { magpieDimensions } from '@/assets/constants/magpieDimensions'
 import { Colors } from '@/assets/constants/Colors'
+import ElevatedView from '../views/ElevatedView/ElevatedView'
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -46,17 +47,17 @@ export default function Auth() {
             password: password,
         })
 
-        console.log('signing up with email....');
-        console.log('session',session);
-        console.log('error?',error);
-        
+        // console.log('signing up with email....');
+        // console.log('session',session);
+        // console.log('error?',error);
+
         if (error) Alert.alert(error.message)
         if (!session) Alert.alert('Please check your inbox for email verification!')
         setLoading(false)
     }
 
     return (
-        <View style={styles.authContainer}>
+        <ElevatedView viewMarginTop={80}>
             <View style={styles.logoContainer}>
                 <Image
                     source={require('../../../assets/icon.png')}
@@ -68,7 +69,7 @@ export default function Auth() {
                     animate={{
                         width: Math.max(Math.min(email.length * 5, 100), 20),
                         height: Math.max(Math.min(email.length * 5, 100), 20),
-                        rotate: loading? '360deg': '0deg'
+                        rotate: loading ? '360deg' : '0deg'
                     }}
                     transition={{
                         type: 'spring',
@@ -80,39 +81,20 @@ export default function Auth() {
                 />
             </View>
             <View style={[styles.verticallySpaced, styles.mt20]}>
-                {/* <Input
-                    label="Email"
-                    leftIcon={{ type: 'font-awesome', name: 'envelope' }}
-                    onChangeText={(text) => setEmail(text)}
-                    value={email}
-                    placeholder="email@address.com"
-                    autoCapitalize={'none'}
-                /> */}
                 <CustomTextInput
                     label="Email"
                     onChangeTextFn={(text) => setEmail(text)}
                     value={email}
                     placeholder="email@address.com"
-                // autoCapitalize={'none'}
                 />
             </View>
             <View style={styles.verticallySpaced}>
-                {/* <Input
-                    label="Password"
-                    leftIcon={{ type: 'font-awesome', name: 'lock' }}
-                    onChangeText={(text) => setPassword(text)}
-                    value={password}
-                    secureTextEntry={true}
-                    placeholder="Password"
-                    autoCapitalize={'none'}
-                /> */}
                 <CustomTextInput
                     label="Password"
                     onChangeTextFn={(text) => setPassword(text)}
                     value={password}
                     isPassword={true}
                     placeholder="Password"
-                // autoCapitalize={'none'}
                 />
             </View>
             <View style={[styles.verticallySpaced, styles.mt20]}>
@@ -131,24 +113,11 @@ export default function Auth() {
                     onPressFn={() => signUpWithEmail()}
                 />
             </View>
-        </View>
+        </ElevatedView>
     )
 }
 
 const styles = StyleSheet.create({
-    authContainer: {
-        marginTop: 40,
-        padding: 12,
-        height: 'auto',
-        width: magpieDimensions.vw * 0.9,
-        alignSelf: 'center',
-        backgroundColor: Colors.lightTheme.background,
-        shadowColor: '#000', // color of the shadow
-        shadowOffset: { width: 0, height: 2 }, // shadow offset (width and height)
-        shadowOpacity: 0.25, // shadow opacity
-        shadowRadius: 3.84, // shadow blur radius
-        elevation: 5,
-    },
     logoContainer: {
         display: 'flex',
         alignItems: 'center',

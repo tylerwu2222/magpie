@@ -79,7 +79,10 @@ const EditableCard = (
       // minWidth: 260,
       width: isFullscreen ? magpieDimensions.vw : cardDimensions.width * 1.5,
       height: isFullscreen ? magpieDimensions.vh - keyboardOffset : cardDimensions.height * 1.5,
-      borderRadius: isFullscreen ? cardDimensions.borderRadius : 0,
+      // borderRadius: isFullscreen ? cardDimensions.borderRadius : 0,
+      borderRadius: cardDimensions.borderRadius * 2,
+      borderTopLeftRadius: 0,
+      borderBottomRightRadius: 0,
       // position: 'absolute',
       // bottom: bottom
     }
