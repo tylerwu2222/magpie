@@ -1,13 +1,22 @@
 import React, { useState } from 'react'
-import { Alert, StyleSheet, View, AppState } from 'react-native'
+import { Alert, StyleSheet, View, Text, AppState } from 'react-native'
 import { supabase } from '@/lib/supabase'
-import { Button, Input } from '@rneui/themed'
+
+// components
 import CustomTextInput from '../inputs/textInput/TextInput'
 import TextButton from '../buttons/TextButton/TextButton'
 import { Image } from 'moti'
-import { magpieDimensions } from '@/assets/constants/magpieDimensions'
 import { Colors } from '@/assets/constants/Colors'
 import ElevatedView from '../views/ElevatedView/ElevatedView'
+
+// auth
+
+// import GoogleOAuth from './oAuth/GoogleOAuth'
+// import FacebookAuth from './oAuth/FacebookAuth'
+// import GithubAuth from './oAuth/GithubAuth'
+
+import { useRouter } from 'expo-router'
+
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -22,6 +31,9 @@ AppState.addEventListener('change', (state) => {
 })
 
 export default function Auth() {
+
+    const router = useRouter();
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
@@ -35,6 +47,7 @@ export default function Auth() {
 
         if (error) Alert.alert(error.message)
         setLoading(false)
+        router.push('/home');
     }
 
     async function signUpWithEmail() {
@@ -45,14 +58,13 @@ export default function Auth() {
         } = await supabase.auth.signUp({
             email: email,
             password: password,
+            options: {
+                emailRedirectTo: ''
+            }
         })
 
-        // console.log('signing up with email....');
-        // console.log('session',session);
-        // console.log('error?',error);
-
         if (error) Alert.alert(error.message)
-        if (!session) Alert.alert('Please check your inbox for email verification!')
+        if (!session) Alert.alert('Please check your email: ' + email + ' for email verification! Then come back here to sign in')
         setLoading(false)
     }
 
@@ -80,39 +92,51 @@ export default function Auth() {
                     }}
                 />
             </View>
-            <View style={[styles.verticallySpaced, styles.mt20]}>
-                <CustomTextInput
-                    label="Email"
-                    onChangeTextFn={(text) => setEmail(text)}
-                    value={email}
-                    placeholder="email@address.com"
-                />
+            <View style={styles.emailAuthContainer}>
+                <View style={[styles.verticallySpaced, styles.mt20]}>
+                    <CustomTextInput
+                        label="Email"
+                        maxWidth={250}
+                        onChangeTextFn={(text) => setEmail(text)}
+                        value={email}
+                        placeholder="email@address.com"
+                    />
+                </View>
+                <View style={styles.verticallySpaced}>
+                    <CustomTextInput
+                        label="Password"
+                        maxWidth={250}
+                        onChangeTextFn={(text) => setPassword(text)}
+                        value={password}
+                        isPassword={true}
+                        placeholder="Password"
+                    />
+                </View>
+                <View style={[styles.verticallySpaced, styles.mt20]}>
+                    <TextButton
+                        text='Sign in'
+                        buttonColorDict={Colors.accentBlueButtonFilled}
+                        buttonWidth={250}
+                        disabled={loading}
+                        onPressFn={() => signInWithEmail()}
+                    />
+                </View>
+                <View style={styles.verticallySpaced}>
+                    <TextButton
+                        text='Sign up'
+                        buttonColorDict={Colors.darkGreyButtonFilled}
+                        buttonWidth={250}
+                        disabled={loading}
+                        onPressFn={() => signUpWithEmail()}
+                    />
+                </View>
             </View>
-            <View style={styles.verticallySpaced}>
-                <CustomTextInput
-                    label="Password"
-                    onChangeTextFn={(text) => setPassword(text)}
-                    value={password}
-                    isPassword={true}
-                    placeholder="Password"
-                />
-            </View>
-            <View style={[styles.verticallySpaced, styles.mt20]}>
-                <TextButton
-                    text='Sign in'
-                    buttonColorDict={Colors.accentBlueButtonFilled}
-                    disabled={loading}
-                    onPressFn={() => signInWithEmail()}
-                />
-            </View>
-            <View style={styles.verticallySpaced}>
-                <TextButton
-                    text='Sign up'
-                    buttonColorDict={Colors.darkGreyButtonFilled}
-                    disabled={loading}
-                    onPressFn={() => signUpWithEmail()}
-                />
-            </View>
+            {/* <View style={styles.oAuthContainer}>
+                <Text>Or sign in with a social:</Text>
+                <GoogleOAuth />
+                <FacebookAuth />
+                <GithubAuth />
+            </View> */}
         </ElevatedView>
     )
 }
@@ -123,9 +147,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         // justifyContent: 'center'
     },
+    emailAuthContainer: {
+
+    },
+    oAuthContainer: {
+
+    },
     verticallySpaced: {
-        paddingTop: 4,
-        paddingBottom: 4,
+        paddingTop: 15,
+        paddingBottom: 15,
         alignSelf: 'stretch',
     },
     mt20: {

@@ -1,0 +1,52 @@
+{
+    "expo": {
+      "name": "magpie",
+      "slug": "magpie",
+    "version": "1.0.0-alpha.1",
+      "android": {
+        "package": "com.tylerwu.magpie",
+        "adaptiveIcon": {
+          "foregroundImage": "./assets/adaptive-icon.png",
+          "backgroundColor": "#ffffff"
+        }
+      },
+      "orientation": "portrait",
+      "icon": "./assets/icon.png",
+      "scheme": "com.tylerwu.magpie",
+      "userInterfaceStyle": "light",
+      "splash": {
+        "image": "./assets/splash.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff"
+      },
+      "ios": {
+        "supportsTablet": true
+      },
+      "web": {
+        "bundler": "metro",
+        "output": "static",
+        "favicon": "./assets/favicon.png"
+      },
+      "extra": {
+        "router": {
+          "origin": false
+        },
+        "eas": {
+          "projectId": "5e443043-1aa1-4638-a4b3-7913c9b38d7c"
+        }
+      },
+      "plugins": [
+        "expo-router",
+        [
+          "@react-native-google-signin/google-signin",
+          {
+            "iosUrlScheme": "com.googleusercontent.apps._some_id_here_"
+          }
+        ]
+      ],
+      "experiments": {
+        "typedRoutes": true
+      }
+    }
+  }
+  

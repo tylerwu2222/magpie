@@ -11,7 +11,9 @@ interface TextButtonProps {
   // textSize: ;
   mode?: 'text' | 'outlined' | 'contained' | 'elevated' | 'contained-tonal',
   disabled: boolean,
+  buttonWidth?: number,
   borderRadius?: number,
+  buttonHeight?: number,
   borderWidth?: number,
   paddingVertical?: number,
   paddingHorizontal?: number,
@@ -29,7 +31,9 @@ const TextButton = ({
   textSize = 'bodyMedium',
   mode = 'contained',
   disabled = false,
-  borderRadius = 20,
+  buttonWidth,
+  buttonHeight = 50,
+  borderRadius = 30,
   paddingVertical = 0,
   paddingHorizontal = 0,
   buttonColorDict = Colors.lightButton,
@@ -41,6 +45,9 @@ const TextButton = ({
     button: {
       backgroundColor: buttonColorDict.default,
       borderRadius: borderRadius + paddingVertical,
+      width: buttonWidth ? buttonWidth : 'auto',
+      height: buttonHeight ? buttonHeight: 'auto',
+      justifyContent: 'center'
     },
     buttonContent: {
       paddingVertical: paddingVertical,

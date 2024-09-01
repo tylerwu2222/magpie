@@ -143,8 +143,8 @@ export default function Home({ session }: { session: Session }) {
               sideMenuVisible,
               setSideMenuVisible
             }}>
-            <SafeAreaView>
-              {cornerButtonsVisible && <DragCornerButtons buttons={HomeCornerButtons} buttonSize={largerButtonSize} />}
+            <SafeAreaView style={{flex: 1}}>
+            {cornerButtonsVisible && <DragCornerButtons buttons={HomeCornerButtons} buttonSize={largerButtonSize} />}
               <View style={styles.homeView}>
                 <AnimatePresence>{sideMenuVisible && <SideDrawerMenu />}</AnimatePresence>
                 <NewEditableCardModal

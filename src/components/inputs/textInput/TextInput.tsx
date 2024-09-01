@@ -21,11 +21,12 @@ interface CustomTextInputProps {
     isFullWidth: boolean,
     hasBorder: boolean,
     isPassword: boolean,
-    useAutocapitalize: 'none'|'sentences'| 'words'| 'characters',
+    useAutocapitalize: 'none' | 'sentences' | 'words' | 'characters',
 
     startDisplayLines: number,
     endDisplayLines: number,
     fontSize: number,
+    maxWidth: number | null,
     height: number | null,
     paddingHorizontal: number,
     paddingVertical: number,
@@ -58,6 +59,7 @@ const CustomTextInput = ({
 
     startDisplayLines = 1,
     endDisplayLines = 100,
+    maxWidth,
     fontSize = 12,
     height = null,
     paddingHorizontal = 0,
@@ -70,6 +72,11 @@ const CustomTextInput = ({
 }: Partial<CustomTextInputProps>) => {
 
     // const [textValue, setTextValue] = useState(defaultValue);
+    const [textHidden, setTextHidden] = useState(isPassword);
+
+    const toggleTextVisibility = () => {
+        setTextHidden(!textHidden);
+    };
 
     const styles = StyleSheet.create({
         scrollContainer: {
@@ -91,7 +98,8 @@ const CustomTextInput = ({
             fontSize: fontSize,
             minHeight: fontSize * startDisplayLines,
             // height: '80%',
-            maxHeight: fontSize * endDisplayLines
+            maxHeight: fontSize * endDisplayLines,
+            maxWidth: maxWidth ? maxWidth : undefined
             // justifyContent: "center"
         }
     });
@@ -113,7 +121,13 @@ const CustomTextInput = ({
         activeUnderlineColor={hasBorder ? textInputColor.text : 'transparent'}
         multiline={isMultiline}
         autoCapitalize={useAutocapitalize}
-        secureTextEntry={isPassword}
+        secureTextEntry={textHidden}
+        right={
+            isPassword?<TextInput.Icon 
+            icon={textHidden ? 'eye-off' : 'eye'}
+            onPress={toggleTextVisibility}
+        />:<></>
+        }
 
         // numberOfLines={startDisplayLines}
         dense={isMultiline ? false : isDense}

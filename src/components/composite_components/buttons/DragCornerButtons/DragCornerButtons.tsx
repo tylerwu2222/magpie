@@ -27,10 +27,11 @@ const DragCornerButtons = ({
   const styles = StyleSheet.create({
     dragCornerButtonsContainer: {
       position: 'absolute',
+      top: 50,
       // backgroundColor: 'transparent',
       backgroundColor: '#00000060', // 40% transparency
       width: magpieDimensions.vw,
-      height: magpieDimensions.vh * 1.05,
+      height: magpieDimensions.vh,
       overflow: 'hidden',
       zIndex: 10
     },
