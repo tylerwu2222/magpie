@@ -32,7 +32,7 @@ AppState.addEventListener('change', (state) => {
 
 export default function Auth() {
 
-    const router = useRouter();
+    // const router = useRouter();
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -47,7 +47,8 @@ export default function Auth() {
 
         if (error) Alert.alert(error.message)
         setLoading(false)
-        router.push('/home');
+        // if (session){}
+        // router.push('/home');
     }
 
     async function signUpWithEmail() {

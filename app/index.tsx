@@ -27,6 +27,7 @@ export default function Index() {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
     })
+    console.log('session set', session);
   }, [])
 
   return (
