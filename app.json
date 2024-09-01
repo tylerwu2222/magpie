@@ -2,13 +2,14 @@
     "expo": {
       "name": "magpie",
       "slug": "magpie",
-    "version": "1.0.0-alpha.1",
+    "version": "1.0.0-alpha.1b",
       "android": {
         "package": "com.tylerwu.magpie",
         "adaptiveIcon": {
           "foregroundImage": "./assets/adaptive-icon.png",
           "backgroundColor": "#ffffff"
-        }
+        },
+        "versionCode": 2
       },
       "orientation": "portrait",
       "icon": "./assets/icon.png",

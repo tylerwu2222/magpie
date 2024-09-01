@@ -2,6 +2,7 @@ node_modules/
 .expo/
 .vscode/
 android
+android_builds
 dist/
 npm-debug.*
 *.jks
