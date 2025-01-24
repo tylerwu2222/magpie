@@ -7,7 +7,7 @@ import { View } from "react-native";
 import 'react-native-reanimated';
 import 'react-native-gesture-handler';
 
-import Home from './home';
+import Home from './home.tsx';
 import Auth from "@/src/components/auth/Auth";
 // import Account from "@/src/components/auth/Account";
 
