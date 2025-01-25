@@ -16,3 +16,5 @@ export type basicButtonType = {
 export type TextPosition = 'bottom' | 'left' | 'top' | 'right';
 
 export type FlexDirection = 'column' | 'row-reverse' | 'column-reverse' | 'row';
+
+export type CardLineTypes = 'text' | 'checkbox' | 'gauge' |'image'

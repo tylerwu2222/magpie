@@ -98,6 +98,7 @@ const CustomTextInput = ({
       // height: '80%',
       maxHeight: fontSize * endDisplayLines,
       maxWidth: maxWidth ? maxWidth : undefined,
+      width: isFullWidth? '100%': undefined,
       //   borderRadius: 60
       // justifyContent: "center"
     },

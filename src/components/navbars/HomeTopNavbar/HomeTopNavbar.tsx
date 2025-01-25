@@ -8,7 +8,7 @@ import { Colors } from '@/assets/constants/Colors';
 // import { magpieDimensions } from '@/assets/constants/magpieDimensions';
 
 // HomeTop navbar icons
-import SearchBar from '../../inputs/textInput/SearchBar';
+import SearchBar from '../../inputs/text_input/SearchBar';
 import { magpieDimensions, navbarDimensions } from '@/assets/constants/magpieDimensions';
 
 // import PencilIconButton from '../../buttons/common_icon_buttons/PencilIconButton';

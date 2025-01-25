@@ -5,8 +5,8 @@ import { runOnJS } from 'react-native-reanimated';
 import { HomeContext } from '@/app/home';
 
 // components
-import EditableCardModal from '@/src/components/modals/EditableCardModal/EditableCardModal';
-import DraggableCardModal from '@/src/components/modals/DraggableCardModal/DraggableCardModal';
+import EditableCardModal from '@/src/components/modals/card_modals/EditableCardModal/EditableCardModal';
+import DraggableCardModal from '@/src/components/modals/card_modals/DraggableCardModal/DraggableCardModal';
 import StaticCardContent from '../StaticCardContent';
 
 // styles

@@ -6,7 +6,7 @@ import React, { useState, useContext } from 'react';
 import { Portal } from 'react-native-paper';
 import { MotiPressable } from 'moti/interactions';
 import AnimatedCardContent from '../AnimatedCardContent';
-import EditableCardModal from '@/src/components/modals/EditableCardModal/EditableCardModal';
+import EditableCardModal from '@/src/components/modals/card_modals/EditableCardModal/EditableCardModal';
 import { PanGestureHandler, PanGestureHandlerGestureEvent } from 'react-native-gesture-handler';
 
 // styles

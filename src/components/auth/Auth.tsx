@@ -3,7 +3,7 @@ import { Alert, StyleSheet, View, Text, AppState } from "react-native";
 import { supabase } from "@/lib/supabase";
 
 // components
-import CustomTextInput from "../inputs/textInput/TextInput";
+import CustomTextInput from "../inputs/text_input/TextInput";
 import TextButton from "../buttons/TextButton/TextButton";
 import { Image } from "moti";
 import { Colors } from "@/assets/constants/Colors";

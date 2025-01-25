@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 
 import { Portal, Modal } from 'react-native-paper';
 
-import DraggableCard from '../../items/cards/DraggableCard/DraggableCard'
+import DraggableCard from '../../../items/cards/DraggableCard/DraggableCard'
 import { cardDimensions, magpieDimensions } from '@/assets/constants/magpieDimensions';
 import { entryDataType } from '@/src/types/data';
 

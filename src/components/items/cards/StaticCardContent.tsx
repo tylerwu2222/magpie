@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { Card } from 'react-native-paper';
-import CustomTextInput from '../../inputs/textInput/TextInput';
+import CustomTextInput from '../../inputs/text_input/TextInput';
 import { cardDimensions } from '@/assets/constants/magpieDimensions';
 import { Colors } from '@/assets/constants/Colors';
 import React, { ReactElement, Dispatch, SetStateAction } from 'react'

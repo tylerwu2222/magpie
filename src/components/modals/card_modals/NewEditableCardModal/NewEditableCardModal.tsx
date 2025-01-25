@@ -3,7 +3,7 @@ import React from 'react';
 
 import { Portal, Modal } from 'react-native-paper';
 import { cardDimensions } from '@/assets/constants/magpieDimensions';
-import NewEditableCard from '../../items/cards/EditableCard/NewEditableCard';
+import NewEditableCard from '../../../items/cards/EditableCard/NewEditableCard';
 
 interface NewEditableCardModalProps {
     visible: boolean,

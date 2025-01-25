@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native'
 import React from 'react';
 
 import { Portal, Modal } from 'react-native-paper';
-import EditableCard from '../../items/cards/EditableCard/EditableCard'
+import EditableCard from '../../../items/cards/EditableCard/EditableCard'
 import { cardDimensions } from '@/assets/constants/magpieDimensions';
 import { entryDataType } from '@/src/types/data';
 

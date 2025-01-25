@@ -6,7 +6,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { PaperProvider } from "react-native-paper";
 import { EventProvider } from 'react-native-outside-press';
 
-import NewEditableCardModal from '@/src/components/modals/NewEditableCardModal/NewEditableCardModal';
+import NewEditableCardModal from '@/src/components/modals/card_modals/NewEditableCardModal/NewEditableCardModal';
 import BottomNavbar from '@/src/components/navbars/BottomNavbar/BottomNavbar';
 import ItemView from '@/src/components/composite_components/views/ItemView/ItemView';
 import HomeTopNavbar from '@/src/components/navbars/HomeTopNavbar/HomeTopNavbar';
