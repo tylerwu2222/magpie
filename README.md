@@ -1,6 +1,8 @@
 # Magpie: intuitive notetaking
 Yes, it's another notetaking app. I've used a good amount of notetaking apps for the past few years: OneNote, Google Keep, Notion, Obsidian, etc. and each had features I enjoyed, but each lacked some functionality I wanted. I also wanted to get better at full stack, so I thought: 🐦🐦🪨
-My goal is to complete a ⭐beta⭐ by the end of **September 2024**, and decide from there whether this is worth continuing.
+~~My goal is to complete a ⭐beta⭐ by the end of **September 2024**, and decide from there whether this is worth continuing.~~
+
+April 2025 Update: I've started a full-time job, but will continue working on this as a hobby project :)
 
 # Releases
 The app is currently in alpha for android only. Please email me at [tylerwu2222@gmail.com](mailto:tylerwu2222@gmail.com?subject=[GitHub]%20Source%20Magpie) if you'd like to join intenral testing.
